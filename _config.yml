@@ -23,7 +23,7 @@ timezone: Asia/Shanghai
 # 网址, 必须以 http:// 或 https:// 开头
 url: https://jgq12138.github.io/
 # 文章的 永久链接 格式 
-permalink: :year/:month/:day/:title/
+permalink: /:year/:month/:day/:title/
 # 永久链接中各部分的默认值
 permalink_defaults:
 # 改写 permalink 的值来美化 URL
@@ -125,14 +125,14 @@ pagination_dir: page
 
 # Include / Exclude file(s)
 ## include:/exclude: options only apply to the 'source/' folder
-include:
-exclude:
-ignore:
+# include:
+# exclude:
+# ignore:
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: hexo-theme-pure
+theme: pure
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
