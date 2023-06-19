@@ -119,7 +119,7 @@ repository:
 # Gitment
 # Introduction: https://imsun.net/posts/gitment-introduction/
 comment:
-  type: gitalk  # 启用哪种评论系统
+  type:   # 启用哪种评论系统
   disqus:  # enter disqus shortname here
   youyan: 
     uid: 1783844 # enter youyan uid 
@@ -132,11 +132,11 @@ comment:
     ClientSecret: 
     lazy: false
   gitalk: # gitalk. https://gitalk.github.io/
-    owner:  2766929505@qq.com
-    admin:  2766929505@qq.com
-    repo:  gitalk
-    ClientID:  7938fd61780f05e09991
-    ClientSecret:  0f89d0cd985e47b587a74a76e32c70bb771af5d7
+    owner:  
+    admin:  
+    repo:  
+    ClientID:  
+    ClientSecret:  
     enableHotKey: true
     language: zh-CN
     
