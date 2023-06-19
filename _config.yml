@@ -3,46 +3,80 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle: ''
-description: ''
+# 网站标题
+title: jgq12138
+# 网站副标题
+subtitle: blog
+# 网站描述
+description: documents
+# 网站的关键词。支持多个关键词。
 keywords:
-author: John Doe
-language: en
-timezone: ''
+# 您的名字
+author: gaoqiang.jin
+# 网站使用的语言。对于简体中文用户来说，使用不同的主题可能需要设置成不同的值，请参考你的主题的文档自行设置，常见的有 zh-Hans和 zh-CN。
+language: zh-CN
+# 网站时区。Hexo 默认使用您电脑的时区。请参考 时区列表 进行设置，如 America/New_York, Japan, 和 UTC 。一般的，对于中国大陆地区可以使用 Asia/Shanghai。
+timezone: Asia/Shanghai
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
+# 网址, 必须以 http:// 或 https:// 开头
+url: https://jgq12138.github.io/
+# 文章的 永久链接 格式 
 permalink: :year/:month/:day/:title/
+# 永久链接中各部分的默认值
 permalink_defaults:
+# 改写 permalink 的值来美化 URL
 pretty_urls:
+  # 是否在永久链接中保留尾部的 index.html，设置为 false 时去除
   trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
+  # 是否在永久链接中保留尾部的 .html, 设置为 false 时去除 (对尾部的 index.html无效)
   trailing_html: true # Set to false to remove trailing '.html' from permalinks
 
 # Directory
+# 资源文件夹,这个文件夹用来存放内容。
 source_dir: source
+# 公共文件夹，这个文件夹用于存放生成的站点文件。
 public_dir: public
+# 标签文件夹
 tag_dir: tags
+# 归档文件夹
 archive_dir: archives
+# 分类文件夹
 category_dir: categories
+# Include code 文件夹，source_dir 下的子目录
 code_dir: downloads/code
+# 国际化（i18n）文件夹
 i18n_dir: :lang
+# 跳过指定文件的渲染。匹配到的文件将会被不做改动地复制到 public 目录中。您可使用 glob 表达式来匹配路径。
 skip_render:
 
 # Writing
+# 新文章的文件名称
 new_post_name: :title.md # File name of new posts
+# 预设布局
 default_layout: post
+# 把标题转换为 title case
 titlecase: false # Transform title into titlecase
+# 在新标签中打开链接
 external_link:
+  # 在新标签中打开链接
   enable: true # Open external links in new tab
+  # 对整个网站（site）生效或仅对文章（post）生效
   field: site # Apply to the whole site
+  # 需要排除的域名。主域名和子域名如 www 需分别配置
   exclude: ''
+# 把文件名称转换为 (1) 小写或 (2) 大写
 filename_case: 0
+# 显示草稿
 render_drafts: false
+# 启动 Asset 文件夹
 post_asset_folder: false
+# 把链接改为与根目录的相对位址
 relative_link: false
+# 显示未来的文章
 future: true
+# 代码块的设置, 请参考 https://hexo.io/zh-cn/docs/syntax-highlight#Highlight-js 进行设置
 highlight:
   enable: true
   line_number: true
@@ -50,6 +84,7 @@ highlight:
   tab_replace: ''
   wrap: true
   hljs: false
+# 代码块的设置, 请参考 https://hexo.io/zh-cn/docs/syntax-highlight#PrismJS 进行设置
 prismjs:
   enable: false
   preprocess: true
@@ -97,7 +132,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: hexo-theme-pure
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
