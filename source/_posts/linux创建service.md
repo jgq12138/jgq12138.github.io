@@ -1,9 +1,3 @@
----
-title: Linux 创建service
-date: 2023-06-19 18:05:00
-tags: Linux
----
-
 # linux 创建service
 
 ## 说明

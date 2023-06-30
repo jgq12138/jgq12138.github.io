@@ -1,9 +1,3 @@
----
-title: Linux 创建系统用户
-date: 2023-06-19 18:05:00
-tags: Linux
----
-
 # Linux 创建系统用户
 
 ## 以root 用户登陆

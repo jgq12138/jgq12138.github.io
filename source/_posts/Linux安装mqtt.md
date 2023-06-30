@@ -1,9 +1,3 @@
----
-title: Linux 安装mqtt
-date: 2023-06-19 18:05:00
-tags: Linux
----
-
 # Linux 安装mqtt
 
 [下载地址](https://github.com/emqx/emqx/releases)

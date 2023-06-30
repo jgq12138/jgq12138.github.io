@@ -1,9 +1,3 @@
----
-title: linux install jdk 8
-date: 2023-06-19 18:05:00
-tags: Linux
----
-
 # linux install jdk 8
 
 ## download jdk 8

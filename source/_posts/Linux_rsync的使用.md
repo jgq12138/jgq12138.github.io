@@ -1,12 +1,5 @@
----
-title: RSYNC 的简单使用
-date: 2023-06-19 18:05:00
-tags: Linux
----
-
 # RSYNC
 
-```bash
 --progress 选项来显示进度
 
 -z: --compress 使用压缩机制
@@ -28,10 +21,10 @@ tags: Linux
 -D, 相当于 --devices --specials 的组合, 保留设备文件, 保留特殊文件.
 
 rsync -avrptg --progress /home/admin123/miniodata/events/wf/ /home/admin123/huawei/
-```
+
+------------------------------------------------------------------------------------------------
 
 ## 下面是rsync中可用选项的简短摘要。请参阅下面的详细说明以获得完整的说明
-
 
 |短参数| 长参数              | 英文解析                                           | 中文解析                                         |
 |:--- |    :----            |:---                                               |:---                                             |
@@ -166,4 +159,4 @@ rsync -avrptg --progress /home/admin123/miniodata/events/wf/ /home/admin123/huaw
 |-4,|--ipv4                 |prefer IPv4                                        |                                                    |
 |-6,|--ipv6                 |prefer IPv6                                        |                                                    |
 |   |--version              |print version number                               |打印版本号                                          |
-|-h,|--help                 |show this help (-h is --help only if used alone)   |显示这个帮助(-h是--help仅用于单独使用)
+|-h,|--help                 |show this help (-h is --help only if used alone)   |显示这个帮助(-h是--help仅用于单独使用)|

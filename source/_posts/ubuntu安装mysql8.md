@@ -1,12 +1,6 @@
----
-title: ubuntu server 安装MySQL8
-date: 2023-06-19 18:05:00
-tags: Linux
----
-
 # ubuntu 安装MySQL8
 
-# 安装源
+## 安装源
 
 ```bash
 wget https://repo.mysql.com//mysql-apt-config_0.8.22-1_all.deb

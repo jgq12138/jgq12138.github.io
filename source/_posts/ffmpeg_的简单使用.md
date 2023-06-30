@@ -1,14 +1,8 @@
----
-title: ffmpeg 的简单使用
-date: 2023-06-19 18:05:00
-tags: Linux
----
-
 # ffmpeg 的简单使用
 
 ## 1、保存视频
 
-```bash 
+```bash
 ffmpeg -i input -vcodec copy -acodec copy output
 ```
 
@@ -44,7 +38,7 @@ ffmpeg 常用参数总结：
 
 ## 特殊字符处理
 
-**转义**
+- 转义
 
 如：ffplay -i rtsp://root:Hik@2021!@15.144.124.204/Streaming/Channels/101
 转义后：ffplay -i rtsp://root:Hik\@2021\!@15.144.124.204/Streaming/Channels/101

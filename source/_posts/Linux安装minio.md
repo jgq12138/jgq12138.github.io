@@ -1,9 +1,3 @@
----
-title: linux install minio
-date: 2023-06-19 18:05:00
-tags: Linux
----
-
 # linux install minio
 
 ## download and install
@@ -49,18 +43,18 @@ sudo vim /etc/systemd/system/minio.service
 [Unit]
 Description=Minio
 Documentation=https://docs.minio.io
-Wants=network-online.target
-After=network-online.target
-AssertFileIsExecutable=/home/minio/bin/minio
+Wants=network.target remote-fs.target nss-lookup.target
+After=network.target remote-fs.target nss-lookup.target
+AssertFileIsExecutable=/usr/bin/minio
 
 [Service]
-WorkingDirectory=/home/minio
+WorkingDirectory=/usr/share/minio
 User=minio
 Group=minio
 PermissionsStartOnly=true
-EnvironmentFile=-/home/minio/conf/minio.conf
-ExecStartPre=/bin/bash -c "[ -n \"${MINIO_VOLUMES}\" ] || echo \"Variable MINIO_VOLUMES not set in /home/minio/data/minio.conf\""
-ExecStart=/home/minio/bin/minio server $MINO_OPTS $MINIO_VOLUMES
+EnvironmentFile=-/etc/minio/minio.conf
+ExecStartPre=/bin/bash -c "[ -n \"${MINIO_VOLUMES}\" ] || echo \"Variable MINIO_VOLUMES not set in /etc/minio/minio.conf\""
+ExecStart=/usr/bin/minio server $MINO_OPTS $MINIO_VOLUMES
 StandardOutput=journal
 StandardError=inherit
 # Specifies the maximum file descriptor number that can be opened by this process
