@@ -1,4 +1,8 @@
-# Linux 安装redis
+---
+title: Linux 安装redis
+date: 2023-06-19 18:05:00
+tags: Linux
+---
 
 [redis官方网站](https://redis.io)
 

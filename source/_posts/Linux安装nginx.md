@@ -1,4 +1,8 @@
-# 编译nginx
+---
+title: 编译nginx
+date: 2023-06-19 18:05:00
+tags: Linux
+---
 
 ## 安装开发工具包
 

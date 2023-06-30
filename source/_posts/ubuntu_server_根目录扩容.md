@@ -1,4 +1,8 @@
-# ubuntu server 根目录扩容
+---
+title: ubuntu server 根目录扩容
+date: 2023-06-19 18:05:00
+tags: Linux
+---
 
 ## 如果是VMware 虚拟机，需要清理快照，整合磁盘之后，先扩容虚拟机磁盘大小
 

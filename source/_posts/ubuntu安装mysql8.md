@@ -1,4 +1,8 @@
-# ubuntu 安装MySQL8
+---
+title: ubuntu 安装MySQL8
+date: 2023-06-19 18:05:00
+tags: Linux
+---
 
 ## 安装源
 

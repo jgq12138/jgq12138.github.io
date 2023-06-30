@@ -1,4 +1,8 @@
-# find
+---
+title: find 的简单使用
+date: 2023-06-19 18:05:00
+tags: Linux
+---
 
 ```txt
 Usage: find [-H] [-L] [-P] [-Olevel] [-D debugopts] [path...] [expression]

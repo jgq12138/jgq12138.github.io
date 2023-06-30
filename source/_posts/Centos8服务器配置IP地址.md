@@ -1,4 +1,8 @@
-# Centos8服务器配置IP地址
+---
+title: Centos8服务器配置IP地址
+date: 2023-06-19 18:05:00
+tags: Linux
+---
 
 ## 1.修改ifcfg-ens33文件
 

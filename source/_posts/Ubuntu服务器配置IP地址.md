@@ -1,4 +1,8 @@
-# ubuntu 18.04 server 配置IP地址
+---
+title: ubuntu 18.04 server 配置IP地址
+date: 2023-06-19 18:05:00
+tags: Linux
+---
 
 ## 编译Netplan 配置文件
 
