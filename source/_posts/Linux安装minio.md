@@ -120,3 +120,11 @@ fusermount -u /home/deepstream/ai/record
 ```bash
 s3fs zxaidata ~/miniodata/ -o passwd_file=${HOME}/.passwd_s3fs -o url=http://15.112.116.115:9010/ -o use_path_request_style -o dbglevel=info -f -o curldbg -o umask=003 -o uid=1000,gid=1000
 ```
+
+## minio 启用ftp协议
+
+[minio 启用ftp。sftp协议](https://minio.org.cn/docs/cn/minio/linux/developers/file-transfer-protocol.html)
+
+```bash
+./minio server /mnt/ --console-address 0.0.0.0:32120 --address 0.0.0.0:32119 --ftp="address=:32121" --ftp="passive-port-range=32122-42122"
+```
