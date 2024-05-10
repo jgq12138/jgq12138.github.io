@@ -1,8 +1,9 @@
 ---
 title: windows10安装scoop作为包管理器
+tags: 包管理器
+categories : Windows
 abbrlink: 8c46519c
 date: 2023-07-16 18:31:51
-tags:
 ---
 
 [scoop 官网](https://scoop.sh/)

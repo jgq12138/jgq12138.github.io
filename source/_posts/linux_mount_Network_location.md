@@ -1,6 +1,7 @@
 ---
 title: 挂载网络位置
 tags: Linux
+categories : Linux 命令
 abbrlink: a59f5fe4
 date: 2023-06-19 18:05:00
 ---

@@ -1,6 +1,7 @@
 ---
 title: find 的简单使用
 tags: Linux
+categories : Linux 命令
 abbrlink: 5e6ca17
 date: 2023-06-19 18:05:00
 ---

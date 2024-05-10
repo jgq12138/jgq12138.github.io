@@ -1,6 +1,7 @@
 ---
 title: ubuntu server 根目录扩容
 tags: Linux
+categories : Linux 基础
 abbrlink: 6284704e
 date: 2023-06-19 18:05:00
 ---

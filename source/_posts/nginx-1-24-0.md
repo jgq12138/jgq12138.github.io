@@ -1,8 +1,9 @@
 ---
 title: nginx-1.24.0
+categories : 工具安装
 abbrlink: 4e9c5cbc
 date: 2023-11-04 15:40:30
-tags:
+tags: NGINX
 ---
 
 ## 安装开发工具包

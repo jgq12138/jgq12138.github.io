@@ -1,6 +1,7 @@
 ---
 title: 编译nginx
-tags: Linux
+tags: NGINX
+categories : 工具安装
 abbrlink: 1d754660
 date: 2023-06-19 18:05:00
 ---

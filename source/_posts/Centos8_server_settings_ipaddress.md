@@ -1,6 +1,7 @@
 ---
 title: Centos8服务器配置IP地址
 tags: Linux
+categories : Linux 命令
 abbrlink: 91dffcc2
 date: 2023-06-19 18:05:00
 ---

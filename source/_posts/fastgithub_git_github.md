@@ -1,8 +1,9 @@
 ---
 title: fastgithub+git访问github
 abbrlink: '33031923'
+categories : 工具使用
+tags: Github
 date: 2023-07-04 17:08:39
-tags:
 ---
 
 访问github经常性访问不到，或者想clone代码的时候老是超时，记一下解决方案

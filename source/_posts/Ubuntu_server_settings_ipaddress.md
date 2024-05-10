@@ -1,6 +1,7 @@
 ---
 title: ubuntu 18.04 server 配置IP地址
 tags: Linux
+categories : Linux 基础
 abbrlink: a13aa77d
 date: 2023-06-19 18:05:00
 ---

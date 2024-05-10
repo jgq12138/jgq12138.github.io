@@ -1,6 +1,7 @@
 ---
 title: linux install minio
 tags: Linux
+categories : 工具安装
 abbrlink: 86bc0091
 date: 2023-06-19 18:05:00
 ---

@@ -1,8 +1,9 @@
 ---
 title: Ubuntu20.04_Update_gcc_g++
+tags: Linux
 abbrlink: 7bb79c28
+categories : Linux 命令
 date: 2023-12-05 09:49:51
-tags:
 ---
 
 ## 添加安装源

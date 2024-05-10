@@ -1,6 +1,7 @@
 ---
 title: Linux 安装redis
 tags: Linux
+categories : 工具安装
 abbrlink: 22c55d3b
 date: 2023-06-19 18:05:00
 ---

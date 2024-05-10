@@ -1,6 +1,7 @@
 ---
 title: Linux 安装mqtt
 tags: Linux
+categories : 工具安装
 abbrlink: f2b0c00e
 date: 2023-06-19 18:05:00
 ---

@@ -1,8 +1,9 @@
 ---
 title: Ubuntu_server_使用bind9做DNS服务
+tags: DNS
+categories : 网络工具
 abbrlink: 979c50d1
 date: 2023-10-27 18:38:42
-tags:
 ---
 
 Ubuntu 使用bind9 配置一个git.monitor.com的域名指向192.168.99.162 IP

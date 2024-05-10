@@ -1,6 +1,7 @@
 ---
 title: linux 创建service
 tags: Linux
+categories : Linux 命令
 abbrlink: d2bc080f
 date: 2023-06-19 18:05:00
 ---
