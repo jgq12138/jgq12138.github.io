@@ -83,7 +83,8 @@ fancybox: false
 
 # Search
 search:
-  insight: false # you need to install `hexo-generator-json-content` before using Insight Search
+  insight: true # you need to install `hexo-generator-json-content` before using Insight Search
+  swiftype: false # enter swiftype install key here
   baidu: false # you need to disable other search engines to use Baidu search
 
 # Donate
@@ -245,3 +246,42 @@ profile:
   #projects:
   #  cofess/gulp-startpro: https://github.com/cofess/gulp-startpro
   #  cofess/hexo-theme-pure: https://github.com/cofess/hexo-theme-pure
+
+  jsonContent:
+  meta: true
+  drafts: false
+  file: custom-file-name.json
+  keywords: undefined
+  dateFormat: undefined
+  pages:
+    title: true
+    slug: true
+    date: true
+    updated: true
+    comments: true
+    path: true
+    link: true
+    permalink: true
+    excerpt: true
+    keywords: false
+    text: true
+    raw: false
+    content: false
+    author: true
+  posts:
+    title: true
+    slug: true
+    date: true
+    updated: true
+    comments: true
+    path: true
+    link: true
+    permalink: true
+    excerpt: true
+    keywords: false
+    text: true
+    raw: false
+    content: false
+    author: true
+    categories: true
+    tags: true

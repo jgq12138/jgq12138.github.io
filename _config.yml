@@ -4,13 +4,13 @@
 
 # Site
 # 网站标题
-title: jgq12138
+title: JGQ12138
 # 网站副标题
-subtitle: blog
+subtitle: Blog
 # 网站描述
 description: documents
 # 网站的关键词。支持多个关键词。
-keywords:
+keywords: Blog
 # 您的名字
 author: gaoqiang.jin
 # 网站使用的语言。对于简体中文用户来说，使用不同的主题可能需要设置成不同的值，请参考你的主题的文档自行设置，常见的有 zh-Hans和 zh-CN。
@@ -86,7 +86,7 @@ highlight:
   hljs: false
 # 代码块的设置, 请参考 https://hexo.io/zh-cn/docs/syntax-highlight#PrismJS 进行设置
 prismjs:
-  enable: false
+  enable: true
   preprocess: true
   line_number: true
   tab_replace: ''
@@ -140,3 +140,17 @@ deploy:
   type: git 
   repository: https://github.com/JGQ12138/jgq12138.github.io
   branch: gh-pages
+# hexo-abbrlink
+abbrlink:
+  alg: crc32      #支持crc16和crc32算法（默认crc16）
+  rep: hex        #支持dec和hex值（默认dec）
+  drafts: false   #(true)Process draft,(false)Do not process draft. false(default) 
+  # Generate categories from directory-tree
+  # depth: the max_depth of directory-tree you want to generate, should > 0
+  auto_category:
+     enable: true  #true(default)
+     depth:        #3(default)
+     over_write: false 
+  auto_title: false #enable auto title, it can auto fill the title by path
+  auto_date: false #enable auto date, it can auto fill the date by time today
+  force: false #enable force mode,in this mode, the plugin will ignore the cache, and calc the abbrlink for every post even it already had abbrlink.
