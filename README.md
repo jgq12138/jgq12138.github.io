@@ -56,3 +56,9 @@ hexo deploy
 ```bash
 git clone https://github.com/cofess/hexo-theme-pure.git themes/pure
 ```
+
+## 新建文章
+
+```bash
+hexo new Articles
+```
