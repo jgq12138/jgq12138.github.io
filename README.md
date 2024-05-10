@@ -62,3 +62,9 @@ git clone https://github.com/cofess/hexo-theme-pure.git themes/pure
 ```bash
 hexo new Articles
 ```
+
+## 新建页面
+
+```bash
+hexo new page Name
+```
