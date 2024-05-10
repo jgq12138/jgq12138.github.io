@@ -79,11 +79,11 @@ archive_type: 'monthly'
 show_count: true
 
 # Fancybox
-fancybox: true
+fancybox: false
 
 # Search
 search:
-  insight: true # you need to install `hexo-generator-json-content` before using Insight Search
+  insight: false # you need to install `hexo-generator-json-content` before using Insight Search
   baidu: false # you need to disable other search engines to use Baidu search
 
 # Donate
@@ -173,7 +173,7 @@ pv:
   busuanzi:
     enable: true  # 不蒜子统计
   leancloud:
-    enable: true  # leancloud统计
+    enable: false  # leancloud统计
     app_id: # leancloud <AppID>
     app_key: # leancloud <AppKey>
         
@@ -245,19 +245,3 @@ profile:
   #projects:
   #  cofess/gulp-startpro: https://github.com/cofess/gulp-startpro
   #  cofess/hexo-theme-pure: https://github.com/cofess/hexo-theme-pure
-
-neat_enable: true
-neat_html:
-  enable: true
-  exclude:  
-neat_css:
-  enable: true
-  exclude:
-    - '*.min.css'
-neat_js:
-  enable: true
-  mangle: true
-  output:
-  compress:
-  exclude:
-    - '*.min.js' 
