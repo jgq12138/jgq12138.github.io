@@ -2,12 +2,12 @@
 menu:
   Home: .
   Archives: archives  # 归档
-  #Categories: categories  # 分类
-  #Tags: tags  # 标签
-  #Repository: repository  # github repositories
+  Categories: categories  # 分类
+  Tags: tags  # 标签
+  Repository: repository  # github repositories
   #Books: books  # 豆瓣书单
-  #Links: links  # 友链
-  #About: about  # 关于
+  Links: links  # 友链
+  About: about  # 关于
 
 # Enable/Disable menu icons
 menu_icons:
@@ -30,11 +30,11 @@ site:
     enabled: true
     width: 40
     height: 40
-    url: ../images/logo.png
+    url: images/v2-64545d88e4f92f07074c3245474f35fb_1440w.webp
   title: Jgq12138 # 页面title
   favicon: /favicon.png
-  board: <p>欢迎交流与分享经验!</p> # 站点公告
-  copyright: false # 底部版权信息
+  board: <p>放假？放什么假，只有对社会没有用的人才会放假!</p> # 站点公告
+  copyright: true # 底部版权信息
 
 # config
 config:
@@ -62,8 +62,8 @@ pagination:
 sidebar: right
 widgets:
   - board  
-  - category
-  - tag
+  - category 
+  - tag 
   - tagcloud
   - archive
   - recent_posts
@@ -79,7 +79,7 @@ archive_type: 'monthly'
 show_count: true
 
 # Fancybox
-fancybox: false
+fancybox: true
 
 # Search
 search:
@@ -88,7 +88,7 @@ search:
 
 # Donate
 donate:
-  enable: true
+  enable: false
   # 微信打赏
   wechatpay:
     qrcode: images/donate/wechatpayimg.png
@@ -106,14 +106,14 @@ share:
   mobile_sites: weibo,qq,qzone  # 移动端显示的分享图标
 
 # Github
-# github: 
-#   username: cofess  # github username
+github: 
+  username: jgq12138  # github username
 
 # Repository Info (This will override 'github' option)
 # 项目仓库信息（将会覆盖 github 项）
 repository:
   platform: github # 托管平台（github | gitee）
-  username: cofess # 用户名
+  username: jgq12138 # 用户名
 
 # Comment
 # Gitment
@@ -200,17 +200,22 @@ fb_app_id:
 profile:
   enabled: true # Whether to show profile bar
   articleSelfBlock: false # 关闭文章下方的自我介绍
-  avatar: images/avatar.jpg
+  avatar: images/99E6EC6F-AA05-4c60-8D29-9E039702F041.png
   gravatar: # Gravatar email address, if you enable Gravatar, your avatar config will be overriden
-  author: 刁德一✡✡✡✡✡✡
-  author_title: 阿巴拉巴拉
-  author_description: 阿巴拉巴拉
+  author: star皆空
+  author_title: 老骥伏枥，志在千里；横扫饥饿，做回自己。
+  author_description: 
   location: Shenzhen, China
   #follow: https://github.com/cofess
   # Social Links
   social:
     links:
       github: https://github.com/JGQ12138/
+      gitee: https://gitee.com/JGQ12138/
+      # weibo: https://weibo.com/u/5784587754
+      # zhihu: https://www.zhihu.com/people/jgq12138/activities
+      # facebook: https://www.facebook.com/profile.php?id=1000092199584862
+      # twitter: https://twitter.com/JGQ12138
     link_tooltip: false # enable the social link tooltip, options: true, false
   # My Skills 
   skills:
@@ -240,3 +245,19 @@ profile:
   #projects:
   #  cofess/gulp-startpro: https://github.com/cofess/gulp-startpro
   #  cofess/hexo-theme-pure: https://github.com/cofess/hexo-theme-pure
+
+neat_enable: true
+neat_html:
+  enable: true
+  exclude:  
+neat_css:
+  enable: true
+  exclude:
+    - '*.min.css'
+neat_js:
+  enable: true
+  mangle: true
+  output:
+  compress:
+  exclude:
+    - '*.min.js' 

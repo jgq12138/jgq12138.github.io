@@ -54,5 +54,5 @@ hexo deploy
 ## 安装主题
 
 ```bash
-git submodule add https://github.com/cofess/hexo-theme-pure.git themes/pure
+git clone https://github.com/cofess/hexo-theme-pure.git themes/pure
 ```

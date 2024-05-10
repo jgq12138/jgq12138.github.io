@@ -132,3 +132,5 @@ dist
 
 db.json
 .deploy_git
+package-lock.json
+package.json
