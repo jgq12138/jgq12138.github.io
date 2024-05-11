@@ -38,7 +38,7 @@ vim ./conf/minio.conf
 MINIO_VOLUMES=/home/minio/data
 MINIO_OPTS="--console-address 0.0.0.0:9001 --address 0.0.0.0:9000"
 MINIO_ROOT_USER=minio
-MINIO_ROOT_PASSWORD=Minio@ZXAI.net
+MINIO_ROOT_PASSWORD=minio
 ```
 
 ## 写服务文件
@@ -97,12 +97,12 @@ sudo apt install s3fs
 
 ```bash
 vim ~/.passwd_s3fs
-minio:Minio@ZXAI.net
+minio:minio
 chmod 0600 ~/.passwd_s3f3
 ```
 
 ```bash
-s3fs test /minio/ -o passwd_file=/home/deepstream/.passwd_s3fs -o url=http://15.112.116.115:9010/ -o use_path_request_style -o umask=0002 -o uid=1000,gid=1000
+s3fs test /minio/ -o passwd_file=/home/deepstream/.passwd_s3fs -o url=http://127.0.0.1:9010/ -o use_path_request_style -o umask=0002 -o uid=1000,gid=1000
 ```
 
 ## 调试参数
@@ -114,13 +114,13 @@ s3fs test /minio/ -o passwd_file=/home/deepstream/.passwd_s3fs -o url=http://15.
 ## 取消挂载
 
 ```bash
-fusermount -u /home/deepstream/ai/record
+fusermount -u /home/ai/record
 ```
 
 ## 指定用户，权限
 
 ```bash
-s3fs zxaidata ~/miniodata/ -o passwd_file=${HOME}/.passwd_s3fs -o url=http://15.112.116.115:9010/ -o use_path_request_style -o dbglevel=info -f -o curldbg -o umask=003 -o uid=1000,gid=1000
+s3fs zxaidata ~/miniodata/ -o passwd_file=${HOME}/.passwd_s3fs -o url=http://127.0.0.1:9010/ -o use_path_request_style -o dbglevel=info -f -o curldbg -o umask=003 -o uid=1000,gid=1000
 ```
 
 ## minio 启用ftp协议

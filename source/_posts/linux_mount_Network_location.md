@@ -15,7 +15,7 @@ sudo apt install -y cifs-utils
 ## 挂载
 
 ```bash
-sudo /bin/mount.cifs -o username=allclient,password=Huawei12#$,gid="1000",uid="1000",vers=3.0 //monitor.com/QP/Minio_Data /opt/Minio_Data
+sudo /bin/mount.cifs -o username=allclient,password=allclient,gid="1000",uid="1000",vers=3.0 //monitor.com/QP/Minio_Data /opt/Minio_Data
 ```
 
 ## 卸载
@@ -29,5 +29,5 @@ sudo /bin/umount /opt/Minio_Data
 ```bash
 sudo vim /etc/fstab
 # NFS
-//monitor.com/QP/Minio_Data /opt/Minio_Data cifs    username=allclient,password=Huawei12#$,gid=1000,uid=1000,vers=3.0    0   1
+//monitor.com/QP/Minio_Data /opt/Minio_Data cifs    username=allclient,password=allclient,gid=1000,uid=1000,vers=3.0    0   1
 ```
