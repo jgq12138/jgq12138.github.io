@@ -95,7 +95,7 @@ fun_features:
 
     # 是否循环播放效果
     # If true, loop animation
-    loop: true
+    loop: false
 
     # 在指定页面开启，不填则在所有页面开启
     # Enable in specified page, all pages by default
