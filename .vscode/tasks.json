@@ -1,0 +1,43 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "build",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: build",
+			"detail": "hexo generate"
+		},
+		{
+			"type": "npm",
+			"script": "clean",
+			"problemMatcher": [],
+			"label": "npm: clean",
+			"detail": "hexo clean"
+		},
+		{
+			"type": "npm",
+			"script": "deploy",
+			"problemMatcher": [],
+			"label": "npm: deploy",
+			"detail": "hexo deploy"
+		},
+		{
+			"type": "npm",
+			"script": "install",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: install",
+			"detail": "install dependencies from package"
+		},
+		{
+			"type": "npm",
+			"script": "server",
+			"group": "test",
+			"problemMatcher": [],
+			"label": "npm: server",
+			"detail": "hexo server"
+		}
+	]
+}
