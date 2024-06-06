@@ -1,5 +1,5 @@
 ---
-title: Quotes
+title: 名言骚句
 t: true
 i: true
 l: true

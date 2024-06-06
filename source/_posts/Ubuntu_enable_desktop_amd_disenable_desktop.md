@@ -1,5 +1,5 @@
 ---
-title: Ubuntu_enable_desktop_amd_disenable_desktop
+title: Ubuntu 启动和禁用图像界面
 abbrlink: 4f07aa34
 categories : Linux 命令
 date: 2023-12-13 15:49:51

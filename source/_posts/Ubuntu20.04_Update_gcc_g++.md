@@ -1,5 +1,5 @@
 ---
-title: Ubuntu20.04_Update_gcc_g++
+title: Ubuntu20.04 升级gcc,g++
 tags: Linux
 abbrlink: 7bb79c28
 categories : Linux 命令

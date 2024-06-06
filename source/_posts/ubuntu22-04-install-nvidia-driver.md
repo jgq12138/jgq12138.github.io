@@ -1,5 +1,5 @@
 ---
-title: ubuntu22.04_install_nvidia_driver
+title: ubuntu22.04 安装显卡驱动
 date: 2024-06-05 11:10:51
 tags: Linux
 categories : 工具安装

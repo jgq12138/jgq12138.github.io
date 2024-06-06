@@ -1,5 +1,5 @@
 ---
-title: Ubuntu_server_使用bind9做DNS服务
+title: Ubuntu server 使用bind9做DNS服务
 tags: DNS
 categories : 网络工具
 abbrlink: 979c50d1
