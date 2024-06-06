@@ -1,5 +1,5 @@
 ---
-title: 名言骚句
+title: 少年应有鸿鹄志，当骑骏马踏平川。
 t: true
 i: true
 l: true
