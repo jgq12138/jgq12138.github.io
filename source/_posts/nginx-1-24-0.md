@@ -46,7 +46,7 @@ cd ~/nginx/nginx-1.24.0/
             --conf-path=/etc/nginx/nginx.conf \
             --error-log-path=/var/log/nginx/error.log \
             --http-log-path=/var/log/nginx/access.log \
-            --pid-path=/var/run/nginx/nginx.pid \
+            --pid-path=/var/log/nginx/nginx.pid \
             --lock-path=/var/lock/nginx.lock \
             --user=nginx \
             --group=nginx \
@@ -118,11 +118,11 @@ After=network.target
 
 [Service]
 Type=forking
-PIDFile=/run/nginx/nginx.pid
+PIDFile=/var/log/nginx/nginx.pid
 ExecStartPre=/usr/sbin/nginx -t -q -g 'daemon on; master_process on;'
 ExecStart=/usr/sbin/nginx -g 'daemon on; master_process on;'
 ExecReload=/usr/sbin/nginx -g 'daemon on; master_process on;' -s reload
-ExecStop=-/sbin/start-stop-daemon --quiet --stop --retry QUIT/5 --pidfile /run/nginx.pid
+ExecStop=-/sbin/start-stop-daemon --quiet --stop --retry QUIT/5 --pidfile /var/log/nginx/nginx.pid
 TimeoutStopSec=5
 KillMode=mixed
 
