@@ -30,7 +30,7 @@ sudo ln -s /usr/local/sbin/mosquitto /usr/sbin/mosquitto
 ## 配置
 
 ```bash
-sudo /usr/local/mosquitto/bin/mosquitto_passwd -c /usr/local/mosquitto/etc/mosquitto/pwfile.example admin
+sudo mosquitto_passwd -c /etc/mosquitto/pwfile admin
 ```
 
 
