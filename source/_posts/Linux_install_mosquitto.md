@@ -30,7 +30,7 @@ sudo ln -s /usr/local/sbin/mosquitto /usr/sbin/mosquitto
 ## 配置
 
 ```bash
-sudo /usr/local/mosquitto/bin/mosquitto_passwd -c /usr/local/mosquitto/etc/mosquitto/pwfile.example admin
+sudo mosquitto_passwd -c /etc/mosquitto/pwfile admin
 ```
 
 
@@ -58,9 +58,9 @@ topic /iot/user/+
 # 关闭匿名登录
 allow_anonymous false
 # 密码文件
-password_file /usr/local/mosquitto/etc/mosquitto/pwfile.example
+password_file /etc/mosquitto/pwfile
 # 日志可以使用文件记录
-log_dest file /usr/local/mosquitto/logs/mosquitto.log
+log_dest file /var/logs/mosquitto.log
 # 启动用户
 user mosquitto
 # 监听端口
