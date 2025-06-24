@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+  
+  <entry>
+    <title>LinuxUpgradeOpenSSH</title>
+    <link href="/2025/06/24/LinuxUpgradeOpenSSH/"/>
+    <url>/2025/06/24/LinuxUpgradeOpenSSH/</url>
+    
+    <content type="html"><![CDATA[<h1 id="download-source"><a href="#download-source" class="headerlink" title="download source"></a>download source</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">wget https://mirrors.aliyun.com/pub/OpenBSD/OpenSSH/portable/openssh-10.0p2.tar.gz<br>wget https://github.com/openssl/openssl/releases/download/openssl-3.5.0/openssl-3.5.0.tar.gz<br><br>tar -xf openssh-10.0p2.tar.gz<br>tar -xf openssl-3.5.0.tar.gz<br></code></pre></td></tr></table></figure><h1 id="build-and-install-openssl"><a href="#build-and-install-openssl" class="headerlink" title="build and install openssl"></a>build and install openssl</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> openssl-3.5.0<br>./config shared --prefix=/usr/local/openssl --openssldir=/usr/local/openssl<br>make &amp;&amp; <span class="hljs-built_in">sudo</span> make install<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">cp</span> /usr/local/openssl/bin/openssl /usr/local/openssl<br>openssl version<br></code></pre></td></tr></table></figure><h1 id="build-and-install-openssh"><a href="#build-and-install-openssh" class="headerlink" title="build and install openssh"></a>build and install openssh</h1><p>First, uninstall the remaining openssh</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt remove --purge ssh openssh-client openssh-server openssh-sftp-server<br></code></pre></td></tr></table></figure><p>install openssh dependency for ubuntu </p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt install  zlib1g-dev libpam0g-dev libkrb5-dev libedit-dev -y<br></code></pre></td></tr></table></figure><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> openssh-10.0p2<br>./configure --prefix=/usr/local/openssh --sysconfdir=/etc/ssh --with-kerberos5 --with-libedit --with-pam --with-gssapi --with-zlib --with-ssl-dir=/usr/local/openssl --with-privsep-path=/var/lib/sshd<br>make &amp;&amp; <span class="hljs-built_in">sudo</span> make install<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">ln</span> -s /usr/local/openssh/sbin/sshd /usr/sbin/sshd<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">ln</span> -s /usr/local/openssh/bin/scp /usr/bin/<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">ln</span> -s /usr/local/openssh/bin/sftp /usr/bin/<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">ln</span> -s /usr/local/openssh/bin/ssh /usr/bin/<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">ln</span> -s /usr/local/openssh/bin/ssh-add /usr/bin/<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">ln</span> -s /usr/local/openssh/bin/ssh-agent /usr/bin/<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">ln</span> -s /usr/local/openssh/bin/ssh-keygen /usr/bin/<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">ln</span> -s /usr/local/openssh/bin/ssh-keyscan /usr/bin/ <br></code></pre></td></tr></table></figure><h1 id="openssh-service"><a href="#openssh-service" class="headerlink" title="openssh service"></a>openssh service</h1><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs text">[Unit]<br>Description=OpenBSD Secure Shell server<br>Documentation=man:sshd(8) man:sshd_config(5)<br>After=network.target auditd.service<br>ConditionPathExists=!/etc/ssh/sshd_not_to_be_run<br><br>[Service]<br>EnvironmentFile=-/etc/default/ssh<br>ExecStartPre=/usr/sbin/sshd -t<br>ExecStart=/usr/sbin/sshd -D $SSHD_OPTS<br>ExecReload=/usr/sbin/sshd -t<br>ExecReload=/bin/kill -HUP $MAINPID<br>KillMode=process<br>Restart=on-failure<br>RestartPreventExitStatus=255<br>Type=notify<br>RuntimeDirectory=sshd<br>RuntimeDirectoryMode=0755<br><br>[Install]<br>WantedBy=multi-user.target<br>Alias=sshd.service<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>ifmetric 调整网络优先级</title>
+    <link href="/2024/06/06/ifmetric/"/>
+    <url>/2024/06/06/ifmetric/</url>
+    
+    <content type="html"><![CDATA[<h2 id="metric-简介"><a href="#metric-简介" class="headerlink" title="metric 简介"></a>metric 简介</h2><p>Linux 网络中通常用metric控制网络优先级，metric越小网络优先级越高，通常情况下系统默认双网卡metric都是0，这样我们就要人工干预，将某一个网卡的优先级metric值提高，来确保metric为0这个网卡的优先级</p><h2 id="Install-ifmetric"><a href="#Install-ifmetric" class="headerlink" title="Install ifmetric"></a>Install ifmetric</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt install ifmetric<br></code></pre></td></tr></table></figure><h2 id="使用ifmetric调整网络优先级"><a href="#使用ifmetric调整网络优先级" class="headerlink" title="使用ifmetric调整网络优先级"></a>使用ifmetric调整网络优先级</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> ifmetric eth1 100<br></code></pre></td></tr></table></figure><h2 id="使用route也可以调整网络优先级，不过使用route设备重启之后需要再次设置"><a href="#使用route也可以调整网络优先级，不过使用route设备重启之后需要再次设置" class="headerlink" title="使用route也可以调整网络优先级，不过使用route设备重启之后需要再次设置"></a>使用route也可以调整网络优先级，不过使用route设备重启之后需要再次设置</h2><p>这里需要注意的是route无法直接修改你已经添加好的路由优先级，需要删除重新添加</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> route add -host 192.168.0.111 gw 192.168.1.254 metric 0<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Linux 命令</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>ubuntu22.04 安装显卡驱动</title>
+    <link href="/2024/06/05/ubuntu22-04-install-nvidia-driver/"/>
+    <url>/2024/06/05/ubuntu22-04-install-nvidia-driver/</url>
+    
+    <content type="html"><![CDATA[<h2 id="Download-NVIDIA-Driver"><a href="#Download-NVIDIA-Driver" class="headerlink" title="Download NVIDIA Driver"></a>Download NVIDIA Driver</h2><p>Download Links <a href="https://www.nvidia.cn/Download/driverResults.aspx/222416/en-us/">https://www.nvidia.cn/Download/driverResults.aspx/222416/en-us/</a></p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">wget https://us.download.nvidia.cn/tesla/535.161.08/NVIDIA-Linux-x86_64-535.161.08.run<br></code></pre></td></tr></table></figure><p><strong>安装的时候注意需要在关闭图像界面的情况下安装</strong></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl set-default multi-user.target<br></code></pre></td></tr></table></figure><h3 id="disenable-nouveau"><a href="#disenable-nouveau" class="headerlink" title="disenable nouveau"></a>disenable nouveau</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo bash -c &quot;echo blacklist nouveau &gt; /etc/modprobe.d/blacklist-nvidia-nouveau.conf&quot;<br>sudo bash -c &quot;echo options nouveau modeset=0 &gt;&gt; /etc/modprobe.d/blacklist-nvidia-nouveau.conf&quot;<br>cat /etc/modprobe.d/blacklist-nvidia-nouveau.conf<br>sudo update-initramfs -u<br>sudo init 6<br></code></pre></td></tr></table></figure><h3 id="验证nouveau"><a href="#验证nouveau" class="headerlink" title="验证nouveau"></a>验证nouveau</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">lsmod | grep nouveau<br></code></pre></td></tr></table></figure><h2 id="Install-NVIDIA-Driver"><a href="#Install-NVIDIA-Driver" class="headerlink" title="Install NVIDIA Driver"></a>Install NVIDIA Driver</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chmod</span> 755 NVIDIA-Linux-x86_64-535.161.08.run<br><span class="hljs-built_in">sudo</span> ./NVIDIA-Linux-x86_64-535.161.08.run --no-cc-version-check<br></code></pre></td></tr></table></figure><h2 id="遇到的问题及解决方案"><a href="#遇到的问题及解决方案" class="headerlink" title="遇到的问题及解决方案"></a>遇到的问题及解决方案</h2><p>问题描述</p><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">An error occurred while performing the step: &quot;Building kernel modules&quot;.<br>执行“构建内核模块”步骤时发生错误。<br></code></pre></td></tr></table></figure><p>解决方案</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt install gcc-12 g++-12<br><span class="hljs-built_in">sudo</span> update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 40<br><span class="hljs-built_in">sudo</span> update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 50<br><br><span class="hljs-built_in">sudo</span> update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 40<br><span class="hljs-built_in">sudo</span> update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-2 50<br></code></pre></td></tr></table></figure><p>大致原因就是Ubuntu 22.04 的内核是使用gcc12编译的，而Ubuntu 22.04 默认安装的gcc的gcc11，只要将gcc升级至gcc12就不会有报错</p><p>参考链接 <a href="https://forums.developer.nvidia.com/t/driver-install-fails-with-the-error-an-error-occurred-while-performing-the-step-building-kernel-modules-see-var-log-nvidia-installer-log/280385">https://forums.developer.nvidia.com/t/driver-install-fails-with-the-error-an-error-occurred-while-performing-the-step-building-kernel-modules-see-var-log-nvidia-installer-log/280385</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>工具安装</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>少年应有鸿鹄志，当骑骏马踏平川。</title>
+    <link href="/2024/06/03/Quotes/"/>
+    <url>/2024/06/03/Quotes/</url>
+    
+    <content type="html"><![CDATA[<p><u><font size="6"> 少年应有鸿鹄志，当骑骏马踏平川。</font></u><p>                            <p align="right">《史记·陈涉世家》</p><h2 id="摘自"><a href="#摘自" class="headerlink" title="摘自"></a>摘自</h2><p><u><font size="6">陈胜者，阳城人也，字涉。吴广者，阳夏人也，字叔。陈涉少时，尝与人佣耕，辍耕之垄上，怅恨久之，曰：“苟富贵，无相忘。”庸者笑而应曰：“若为庸耕，何富贵也？”陈涉太息曰：“嗟乎，燕雀安知鸿鹄之志哉！”</font></u><p><h2 id="释义"><a href="#释义" class="headerlink" title="释义"></a>释义</h2><p><u>鸿鹄飞得很高，常用来比喻志气高远的人。意思是少年应当有像鸿鹄一样的志向，应当骑着骏马踏过山河平川。少年应有鸿鹄志，但又不能高谈阔论，只说不做。不可否认，作为青年，我们应该对这世界充满了期待，我们应保持“海阔凭鱼跃，天高任鸟飞”勇气和“乘风破浪会有时，直挂云帆济沧海”的赤子之心。</u><p>]]></content>
+    
+    
+    <categories>
+      
+      <category>励志短句</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>名言骚句</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Ubuntu 启动和禁用图像界面</title>
+    <link href="/2023/12/13/Ubuntu_enable_desktop_amd_disenable_desktop/"/>
+    <url>/2023/12/13/Ubuntu_enable_desktop_amd_disenable_desktop/</url>
+    
+    <content type="html"><![CDATA[<h2 id="Ubuntu-桌面版禁用桌面和启用桌面"><a href="#Ubuntu-桌面版禁用桌面和启用桌面" class="headerlink" title="Ubuntu 桌面版禁用桌面和启用桌面"></a>Ubuntu 桌面版禁用桌面和启用桌面</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br><span class="hljs-comment"># 关闭图形界面</span><br>systemctl set-default multi-user.target<br><span class="hljs-comment"># 禁用后需要重启才能生效</span><br><br><span class="hljs-comment"># 打开图形界面</span><br>systemctl set-default graphical.target<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Linux 命令</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Ubuntu20.04 升级gcc,g++</title>
+    <link href="/2023/12/05/Ubuntu20.04_Update_gcc_g++/"/>
+    <url>/2023/12/05/Ubuntu20.04_Update_gcc_g++/</url>
+    
+    <content type="html"><![CDATA[<h2 id="添加安装源"><a href="#添加安装源" class="headerlink" title="添加安装源"></a>添加安装源</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> add-apt-repository -y ppa:ubuntu-toolchain-r/test<br></code></pre></td></tr></table></figure><h2 id="更新安装源和安装最新gcc，g"><a href="#更新安装源和安装最新gcc，g" class="headerlink" title="更新安装源和安装最新gcc，g++"></a>更新安装源和安装最新gcc，g++</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt update<br><span class="hljs-built_in">sudo</span> apt install gcc-11 g++-11<br></code></pre></td></tr></table></figure><h2 id="更新环境变量"><a href="#更新环境变量" class="headerlink" title="更新环境变量"></a>更新环境变量</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 20<br><span class="hljs-built_in">sudo</span> update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 30<br><span class="hljs-built_in">sudo</span> update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 40<br><span class="hljs-built_in">sudo</span> update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 50<br><br><span class="hljs-built_in">sudo</span> update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 30<br><span class="hljs-built_in">sudo</span> update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 40<br><span class="hljs-built_in">sudo</span> update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 50<br><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Linux 命令</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>nginx-1.24.0</title>
+    <link href="/2023/11/04/nginx-1-24-0/"/>
+    <url>/2023/11/04/nginx-1-24-0/</url>
+    
+    <content type="html"><![CDATA[<h2 id="安装开发工具包"><a href="#安装开发工具包" class="headerlink" title="安装开发工具包"></a>安装开发工具包</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">Ubuntu : <span class="hljs-built_in">sudo</span> apt install build-essential<br>Centos : <span class="hljs-built_in">sudo</span> dnf group install <span class="hljs-string">&quot;Development Tools&quot;</span><br></code></pre></td></tr></table></figure><h2 id="下载安装包"><a href="#下载安装包" class="headerlink" title="下载安装包"></a>下载安装包</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">wget https://nginx.org/download/nginx-1.24.0.tar.gz -P ~/nginx<br></code></pre></td></tr></table></figure><h2 id="下载第三方依赖"><a href="#下载第三方依赖" class="headerlink" title="下载第三方依赖"></a>下载第三方依赖</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">wget https://www.openssl.org/source/openssl-1.1.1f.tar.gz -P ~/nginx<br>wget https://www.zlib.net/zlib-1.3.tar.gz -P ~/nginx<br>wget https://nchc.dl.sourceforge.net/project/pcre/pcre/8.45/pcre-8.45.tar.gz -P ~/nginx<br></code></pre></td></tr></table></figure><h2 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~/nginx<br>tar -zxvf nginx-1.24.0.tar.gz<br>tar -zxvf openssl-1.1.1f.tar.gz<br>tar -zxvf zlib-1.3.tar.gz<br>tar -zxvf pcre-8.45.tar.gz<br></code></pre></td></tr></table></figure><h2 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~/nginx/nginx-1.24.0/<br>./configure --prefix=/usr \<br>            --sbin-path=/usr/sbin/nginx \<br>            --conf-path=/etc/nginx/nginx.conf \<br>            --error-log-path=/var/log/nginx/error.log \<br>            --http-log-path=/var/log/nginx/access.log \<br>            --pid-path=/var/log/nginx/nginx.pid \<br>            --lock-path=/var/lock/nginx.lock \<br>            --user=nginx \<br>            --group=nginx \<br>            --http-client-body-temp-path=/var/tmp/nginx/client/ \<br>            --http-proxy-temp-path=/var/tmp/nginx/proxy/ \<br>            --http-fastcgi-temp-path=/var/tmp/nginx/fcgi/ \<br>            --http-uwsgi-temp-path=/var/tmp/nginx/uwsgi/ \<br>            --http-scgi-temp-path=/var/tmp/nginx/scgi/ \<br>            --with-select_module \<br>            --with-poll_module \<br>            --with-threads \<br>            --with-file-aio \<br>            --with-http_ssl_module \<br>            --with-http_v2_module \<br>            --with-http_realip_module \<br>            --with-http_addition_module \<br>            --with-http_sub_module \<br>            --with-http_dav_module \<br>            --with-http_flv_module \<br>            --with-http_mp4_module \<br>            --with-http_gunzip_module \<br>            --with-http_gzip_static_module \<br>            --with-http_auth_request_module \<br>            --with-http_random_index_module \<br>            --with-http_secure_link_module \<br>            --with-http_degradation_module \<br>            --with-http_slice_module \<br>            --with-http_stub_status_module \<br>            --with-mail=dynamic \<br>            --with-mail_ssl_module \<br>            --with-stream \<br>            --with-stream_ssl_module \<br>            --with-stream_realip_module \<br>            --with-stream_ssl_preread_module \<br>            --with-compat \<br>            --with-pcre=../pcre-8.45 \<br>            --with-pcre-jit \<br>            --with-zlib=../zlib-1.3 \<br>            --with-openssl=../openssl-1.1.1f \<br>            --with-openssl-opt=no-nextprotoneg \<br>            --with-debug <br>make -j8<br><span class="hljs-built_in">sudo</span> make install<br></code></pre></td></tr></table></figure><h2 id="创建用户赋权"><a href="#创建用户赋权" class="headerlink" title="创建用户赋权"></a>创建用户赋权</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> useradd nginx -s /sbin/nologin<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">chown</span> nginx:nginx -R /var/log/nginx/<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">chown</span> nginx:nginx -R /var/run/nginx/<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">mkdir</span> -p /var/lock/nginx/<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">mkdir</span> -p /var/tmp/nginx/<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">chown</span> nginx:nginx -R /var/lock/nginx/<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">chown</span> nginx:nginx -R /var/tmp/nginx/<br></code></pre></td></tr></table></figure><h2 id="创建服务"><a href="#创建服务" class="headerlink" title="创建服务"></a>创建服务</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> vim /etc/systemd/system/nginx.service<br></code></pre></td></tr></table></figure><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash">[Unit]<br>Description=A high performance web server and a reverse proxy server<br>Documentation=man:nginx(8)<br>After=network.target<br><br>[Service]<br>Type=forking<br>PIDFile=/var/log/nginx/nginx.pid<br>ExecStartPre=/usr/sbin/nginx -t -q -g <span class="hljs-string">&#x27;daemon on; master_process on;&#x27;</span><br>ExecStart=/usr/sbin/nginx -g <span class="hljs-string">&#x27;daemon on; master_process on;&#x27;</span><br>ExecReload=/usr/sbin/nginx -g <span class="hljs-string">&#x27;daemon on; master_process on;&#x27;</span> -s reload<br>ExecStop=-/sbin/start-stop-daemon --quiet --stop --retry QUIT/5 --pidfile /var/log/nginx/nginx.pid<br>TimeoutStopSec=5<br>KillMode=mixed<br><br>[Install]<br>WantedBy=multi-user.target<br></code></pre></td></tr></table></figure><h2 id="启动，停止，重启，加入开机自启动"><a href="#启动，停止，重启，加入开机自启动" class="headerlink" title="启动，停止，重启，加入开机自启动"></a>启动，停止，重启，加入开机自启动</h2><h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl start nginx.service<br></code></pre></td></tr></table></figure><h3 id="停止"><a href="#停止" class="headerlink" title="停止"></a>停止</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl stop nginx.service<br></code></pre></td></tr></table></figure><h3 id="重启"><a href="#重启" class="headerlink" title="重启"></a>重启</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl restart nginx.service<br></code></pre></td></tr></table></figure><h3 id="加入开机自启动"><a href="#加入开机自启动" class="headerlink" title="加入开机自启动"></a>加入开机自启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl <span class="hljs-built_in">enable</span> nginx.service<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>工具安装</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>NGINX</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Ubuntu server 使用bind9做DNS服务</title>
+    <link href="/2023/10/27/Ubuntu_server_bind9/"/>
+    <url>/2023/10/27/Ubuntu_server_bind9/</url>
+    
+    <content type="html"><![CDATA[<p>Ubuntu 使用bind9 配置一个git.monitor.com的域名指向192.168.99.162 IP</p><p>要在Ubuntu上使用Bind9配置一个git.monitor.com的域名指向192.168.99.162 IP，需要进行以下步骤：</p><ol><li>确保已经安装了Bind9。如果没有安装，可以使用以下命令进行安装：</li></ol><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt-get update<br>sudo apt-get install bind9<br></code></pre></td></tr></table></figure><ol start="2"><li>打开Bind9的配置文件named.conf.local，可以使用任何文本编辑器打开该文件：</li></ol><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo nano /etc/bind/named.conf.local<br></code></pre></td></tr></table></figure><ol start="3"><li>在配置文件中添加以下内容：</li></ol><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs txt">zone &quot;git.monitor.com&quot; &#123;<br>    type master;<br>    file &quot;/etc/bind/db.git.monitor.com&quot;;<br>&#125;;<br></code></pre></td></tr></table></figure><ol start="4"><li><p>保存并关闭文件。</p></li><li><p>创建一个新的区域文件db.git.monitor.com，可以使用以下命令创建并编辑该文件：</p></li></ol><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo nano /etc/bind/db.git.monitor.com<br></code></pre></td></tr></table></figure><ol start="6"><li>在文件中添加以下内容：</li></ol><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs txt">$TTL 86400<br>@   IN   SOA  ns.git.monitor.com. admin.git.monitor.com. (<br>              2023102701     ; Serial<br>               3600          ; Refresh<br>               1800          ; Retry<br>             604800          ; Expire<br>              86400 )        ; Minimum TTL<br><br>@       IN   NS    ns.git.monitor.com.<br>@       IN   A     192.168.99.162<br>ns      IN   A     192.168.99.162<br></code></pre></td></tr></table></figure><ol start="7"><li><p>保存并关闭文件。</p></li><li><p>检查Bind9配置文件是否有语法错误，可以使用以下命令进行检查：</p></li></ol><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo named-checkconf<br></code></pre></td></tr></table></figure><ol start="9"><li>如果没有错误，重新启动Bind9服务：</li></ol><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo service bind9 restart<br></code></pre></td></tr></table></figure><p>现在，git.monitor.com的域名应该已经成功指向了192.168.99.162 IP。请确保你的网络配置和主机IP设置正确，并替换相关的IP和域名信息。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>网络工具</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>DNS</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>windows10安装scoop作为包管理器</title>
+    <link href="/2023/07/16/windows10_install_scoop/"/>
+    <url>/2023/07/16/windows10_install_scoop/</url>
+    
+    <content type="html"><![CDATA[<p><a href="https://scoop.sh/">scoop 官网</a></p><p>scoop 官网安装会提示无法访问<a href="https://raw.githubusercontent.com/">https://raw.githubusercontent.com</a>，要么自己搭梯子访问，要么使用国内源安装(一下命令全在powershell中执行)</p><ul><li>修改策略（需要管理员权限）</li></ul><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser<br></code></pre></td></tr></table></figure><ul><li>安装前准备</li></ul><p>通过改变Scoop安装到自定义目录</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-variable">$env:SCOOP</span>=<span class="hljs-string">&#x27;D:\Applications\Scoop&#x27;</span><br>[<span class="hljs-type">Environment</span>]::SetEnvironmentVariable(<span class="hljs-string">&#x27;SCOOP&#x27;</span>, <span class="hljs-variable">$env:SCOOP</span>, <span class="hljs-string">&#x27;User&#x27;</span>)<br><span class="hljs-comment"># run the installer</span><br></code></pre></td></tr></table></figure><p>通过更改<code>SCOOP_GLOBAL</code>来配置Scoop以将全局程序安装到自定义目录中</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-variable">$env:SCOOP_GLOBAL</span>=<span class="hljs-string">&#x27;F:\GlobalScoopApps&#x27;</span><br>[<span class="hljs-type">Environment</span>]::SetEnvironmentVariable(<span class="hljs-string">&#x27;SCOOP_GLOBAL&#x27;</span>, <span class="hljs-variable">$env:SCOOP_GLOBAL</span>, <span class="hljs-string">&#x27;Machine&#x27;</span>)<br><span class="hljs-comment"># run the installer</span><br></code></pre></td></tr></table></figure><p>配置Scoop以通过更改将下载存储到自定义目录<code>SCOOP_CACHE</code></p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-variable">$env:SCOOP_CACHE</span>=<span class="hljs-string">&#x27;F:\ScoopCache&#x27;</span><br>[<span class="hljs-type">Environment</span>]::SetEnvironmentVariable(<span class="hljs-string">&#x27;SCOOP_CACHE&#x27;</span>, <span class="hljs-variable">$env:SCOOP_CACHE</span>, <span class="hljs-string">&#x27;Machine&#x27;</span>)<br><span class="hljs-comment"># run the installer</span><br></code></pre></td></tr></table></figure><ul><li>安装(不需要管理权限)</li></ul><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">iwr -useb https://gitee.com/glsnames/scoop-installer/raw/master/bin/install.ps1 | iex<br></code></pre></td></tr></table></figure><ul><li>切换国内Gitee仓库</li></ul><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">scoop config SCOOP_REPO https://github.com/ScoopInstaller/Scoop<br></code></pre></td></tr></table></figure><ul><li>添加软件仓库</li></ul><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">scoop update<br>scoop bucket add main<br></code></pre></td></tr></table></figure><ul><li>推荐仓库</li></ul><table><thead><tr><th align="left">仓库名称</th><th align="left">地址</th></tr></thead><tbody><tr><td align="left">dorado</td><td align="left"><a href="https://github.com/chawyehsu/dorado">https://github.com/chawyehsu/dorado</a></td></tr><tr><td align="left">extras</td><td align="left"><a href="https://github.com/ScoopInstaller/Extras">https://github.com/ScoopInstaller/Extras</a></td></tr><tr><td align="left">java</td><td align="left"><a href="https://github.com/ScoopInstaller/Java">https://github.com/ScoopInstaller/Java</a></td></tr><tr><td align="left">lemon</td><td align="left"><a href="https://github.com/hoilc/scoop-lemon">https://github.com/hoilc/scoop-lemon</a></td></tr><tr><td align="left">main</td><td align="left"><a href="https://github.com/ScoopInstaller/Main">https://github.com/ScoopInstaller/Main</a></td></tr><tr><td align="left">MorFans-apt</td><td align="left"><a href="https://github.com/Paxxs/Cluttered-bucket.git">https://github.com/Paxxs/Cluttered-bucket.git</a></td></tr><tr><td align="left">nirsoft</td><td align="left"><a href="https://github.com/kodybrown/scoop-nirsoft">https://github.com/kodybrown/scoop-nirsoft</a></td></tr><tr><td align="left">nonportable</td><td align="left"><a href="https://github.com/ScoopInstaller/Nonportable">https://github.com/ScoopInstaller/Nonportable</a></td></tr><tr><td align="left">scoopcn</td><td align="left"><a href="https://github.com/scoopcn/scoopcn.git">https://github.com/scoopcn/scoopcn.git</a></td></tr><tr><td align="left">sysinternals</td><td align="left"><a href="https://github.com/niheaven/scoop-sysinternals">https://github.com/niheaven/scoop-sysinternals</a></td></tr><tr><td align="left">versions</td><td align="left"><a href="https://github.com/ScoopInstaller/Versions">https://github.com/ScoopInstaller/Versions</a></td></tr><tr><td align="left">zapps</td><td align="left"><a href="https://github.com/kkzzhizhou/scoop-zapps.git">https://github.com/kkzzhizhou/scoop-zapps.git</a></td></tr></tbody></table><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 添加仓库示例</span><br>scoop bucket add dorado https://github.com/chawyehsu/dorado<br></code></pre></td></tr></table></figure><ul><li>使用</li></ul><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs txt">alias      Manage scoop aliases<br>cache      Show or clear the download cache<br>cat        Show content of specified manifest.<br>cleanup    Cleanup apps by removing old versions<br>config     Get or set configuration values<br>create     Create a custom app manifest<br>depends    List dependencies for an app, in the order they&#x27;ll be installed<br>download   Download apps in the cache folder and verify hashes<br>export     Exports installed apps, buckets (and optionally configs) in JSON format<br>help       Show help for a command<br>hold       Hold an app to disable updates<br>home       Opens the app homepage<br>import     Imports apps, buckets and configs from a Scoopfile in JSON format<br>info       Display information about an app<br>install    Install apps<br>list       List installed apps<br>prefix     Returns the path to the specified app<br>reset      Reset an app to resolve conflicts<br>search     Search available apps<br>shim       Manipulate Scoop shims<br>status     Show status and check for new app versions<br>unhold     Unhold an app to enable updates<br>uninstall  Uninstall an app<br>update     Update apps, or Scoop itself<br>virustotal Look for app&#x27;s hash or url on virustotal.com<br>which      Locate a shim/executable (similar to &#x27;which&#x27; on Linux)<br></code></pre></td></tr></table></figure><p>1、更新: <code>scoop update</code><br>2、搜索: <code>scoop search xxx</code><br>3、安装: <code>scoop install xxx</code>,指定版本: <code>scoop install xxx@1.0</code><br>4、卸载: <code>scoop uninstall xxx</code></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Windows</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>包管理器</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>fastgithub+git访问github</title>
+    <link href="/2023/07/04/fastgithub_git_github/"/>
+    <url>/2023/07/04/fastgithub_git_github/</url>
+    
+    <content type="html"><![CDATA[<p>访问github经常性访问不到，或者想clone代码的时候老是超时，记一下解决方案<br>git设置代理参考<a href="https://zhuanlan.zhihu.com/p/481574024">https://zhuanlan.zhihu.com/p/481574024</a><br>github访问不到大概率就是你的DNS找不到github的IP地址<a href="https://github.com/dotnetcore/FastGithub">https://github.com/dotnetcore/FastGithub</a>这个项目可以提供域名的纯净IP解析，提供IP测速并选择最快的IP</p><h2 id="首先安装fastgithub-https-github-com-dotnetcore-FastGithub"><a href="#首先安装fastgithub-https-github-com-dotnetcore-FastGithub" class="headerlink" title="首先安装fastgithub https://github.com/dotnetcore/FastGithub"></a>首先安装fastgithub <a href="https://github.com/dotnetcore/FastGithub">https://github.com/dotnetcore/FastGithub</a></h2><ul><li>访问github仓库，在releases中选择你需要的架构并下载</li><li>安装仓库中部署方式在自己的电脑上面部署一下</li><li>现在浏览器访问github应该会好一些，但是clone代码还是会超时</li></ul><h2 id="git-设置代理"><a href="#git-设置代理" class="headerlink" title="git 设置代理"></a>git 设置代理</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git config --global http.https://github.com.proxy http://127.0.0.1:38457<br></code></pre></td></tr></table></figure><h2 id="取消代理"><a href="#取消代理" class="headerlink" title="取消代理"></a>取消代理</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">git config --global --<span class="hljs-built_in">unset</span> http.proxy<br>git config --global --<span class="hljs-built_in">unset</span> https.proxy<br></code></pre></td></tr></table></figure><h2 id="设置完代理访问github会好很多，建议将fastgithub作为服务运行"><a href="#设置完代理访问github会好很多，建议将fastgithub作为服务运行" class="headerlink" title="设置完代理访问github会好很多，建议将fastgithub作为服务运行"></a>设置完代理访问github会好很多，建议将fastgithub作为服务运行</h2>]]></content>
+    
+    
+    <categories>
+      
+      <category>工具使用</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Github</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>du 的简单使用</title>
+    <link href="/2023/06/30/Linux_du/"/>
+    <url>/2023/06/30/Linux_du/</url>
+    
+    <content type="html"><![CDATA[<p>在Linux系统中，你可以使用<code>du</code>命令（磁盘使用情况）来查询各文件夹占用的空间大小。下面是一些常用的<code>du</code>命令的用法</p><h2 id="1-查询当前文件夹的空间大小"><a href="#1-查询当前文件夹的空间大小" class="headerlink" title="1. 查询当前文件夹的空间大小"></a>1. 查询当前文件夹的空间大小</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">du</span> -sh<br></code></pre></td></tr></table></figure><h2 id="2-查询指定文件夹的空间大小"><a href="#2-查询指定文件夹的空间大小" class="headerlink" title="2. 查询指定文件夹的空间大小"></a>2. 查询指定文件夹的空间大小</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">du</span> -sh /path/to/folder<br></code></pre></td></tr></table></figure><h2 id="3-查询当前文件夹中各子文件夹的空间大小"><a href="#3-查询当前文件夹中各子文件夹的空间大小" class="headerlink" title="3. 查询当前文件夹中各子文件夹的空间大小"></a>3. 查询当前文件夹中各子文件夹的空间大小</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">du</span> -sh *<br></code></pre></td></tr></table></figure><h2 id="4-在查询结果中显示详细信息（包括每个文件-文件夹的大小）"><a href="#4-在查询结果中显示详细信息（包括每个文件-文件夹的大小）" class="headerlink" title="4. 在查询结果中显示详细信息（包括每个文件&#x2F;文件夹的大小）"></a>4. 在查询结果中显示详细信息（包括每个文件&#x2F;文件夹的大小）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">du</span> -ah<br></code></pre></td></tr></table></figure><h2 id="5-查询指定文件夹中各子文件夹的空间大小，并按照结果排序"><a href="#5-查询指定文件夹中各子文件夹的空间大小，并按照结果排序" class="headerlink" title="5. 查询指定文件夹中各子文件夹的空间大小，并按照结果排序"></a>5. 查询指定文件夹中各子文件夹的空间大小，并按照结果排序</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">du</span> -sh /path/to/folder | <span class="hljs-built_in">sort</span> -hr<br></code></pre></td></tr></table></figure><p><strong>以上命令中，<code>du</code>命令用于查询文件夹的占用空间大小，<code>-s</code>选项用于显示总体大小，<code>-h</code>选项用于以人类可读的格式显示结果，<code>-a</code>选项用于显示每个文件&#x2F;文件夹的大小。<code>sort</code>命令用于对结果进行排序，<code>-h</code>选项用于按照人类可读的格式进行排序，<code>-r</code>选项用于倒序排序</strong></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Linux 命令</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Centos8服务器配置IP地址</title>
+    <link href="/2023/06/19/Centos8_server_settings_ipaddress/"/>
+    <url>/2023/06/19/Centos8_server_settings_ipaddress/</url>
+    
+    <content type="html"><![CDATA[<h2 id="1-修改ifcfg-ens33文件"><a href="#1-修改ifcfg-ens33文件" class="headerlink" title="1.修改ifcfg-ens33文件"></a>1.修改ifcfg-ens33文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim /etc/sysconfig/network-scripts/ifcfg-ens33<br></code></pre></td></tr></table></figure><h2 id="修改完的样子"><a href="#修改完的样子" class="headerlink" title="修改完的样子"></a>修改完的样子</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs bash">TYPE=Ethernet<br>PROXY_METHOD=none<br>BROWSER_ONLY=no<br>BOOTPROTO=static<br>DEFROUTE=<span class="hljs-built_in">yes</span><br>IPV4_FAILURE_FATAL=no<br>IPV6INIT=<span class="hljs-built_in">yes</span><br>IPV6_AUTOCONF=<span class="hljs-built_in">yes</span><br>IPV6_DEFROUTE=<span class="hljs-built_in">yes</span><br>IPV6_FAILURE_FATAL=no<br>IPV6_ADDR_GEN_MODE=stable-privacy<br>NAME=ens33<br>UUID=066b4926-b40c-4c28-a5b4-2310d2b96613<br>DEVICE=ens33<br>ONBOOT=<span class="hljs-built_in">yes</span><br><span class="hljs-comment">#IP地址</span><br>IPADDR=192.168.195.129<br><span class="hljs-comment">#子网掩码</span><br>NETMASK=255.255.255.0<br><span class="hljs-comment">#网关</span><br>GATEWAY=192.168.195.2<br><span class="hljs-comment">#DNS</span><br>DNS1=8.8.8.8<br>PREFIX=24<br></code></pre></td></tr></table></figure><h2 id="使用nmcli重新回载网络配置"><a href="#使用nmcli重新回载网络配置" class="headerlink" title="使用nmcli重新回载网络配置"></a>使用nmcli重新回载网络配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nmcli c reload<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Linux 命令</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>linux install minio</title>
+    <link href="/2023/06/19/Linux_install_minio/"/>
+    <url>/2023/06/19/Linux_install_minio/</url>
+    
+    <content type="html"><![CDATA[<h2 id="download-and-install"><a href="#download-and-install" class="headerlink" title="download and install"></a>download and install</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">https://dl.min.io/server/minio/release/linux-amd64/minio<br></code></pre></td></tr></table></figure><h2 id="创建minio用户"><a href="#创建minio用户" class="headerlink" title="创建minio用户"></a>创建minio用户</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">useradd -r -m -s /bin/bash minio<br></code></pre></td></tr></table></figure><h2 id="创建minio文件夹"><a href="#创建minio文件夹" class="headerlink" title="创建minio文件夹"></a>创建minio文件夹</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> bin<br><span class="hljs-built_in">cd</span> bin<br>wget https://dl.min.io/server/minio/release/linux-amd64/minio<br><span class="hljs-built_in">chmod</span> +x minio<br><span class="hljs-built_in">cd</span> ..<br><span class="hljs-built_in">mkdir</span> conf<br><span class="hljs-built_in">mkdir</span> data<br></code></pre></td></tr></table></figure><h2 id="写配置文件"><a href="#写配置文件" class="headerlink" title="写配置文件"></a>写配置文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim ./conf/minio.conf<br><br>MINIO_VOLUMES=/home/minio/data<br>MINIO_OPTS=<span class="hljs-string">&quot;--console-address 0.0.0.0:9001 --address 0.0.0.0:9000&quot;</span><br>MINIO_ROOT_USER=minio<br>MINIO_ROOT_PASSWORD=minio<br></code></pre></td></tr></table></figure><h2 id="写服务文件"><a href="#写服务文件" class="headerlink" title="写服务文件"></a>写服务文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> vim /etc/systemd/system/minio.service<br><br>[Unit]<br>Description=Minio<br>Documentation=https://docs.minio.io<br>Wants=network.target remote-fs.target nss-lookup.target<br>After=network.target remote-fs.target nss-lookup.target<br>AssertFileIsExecutable=/usr/bin/minio<br><br>[Service]<br>WorkingDirectory=/usr/share/minio<br>User=minio<br>Group=minio<br>PermissionsStartOnly=<span class="hljs-literal">true</span><br>EnvironmentFile=-/etc/minio/minio.conf<br>ExecStartPre=/bin/bash -c <span class="hljs-string">&quot;[ -n \&quot;<span class="hljs-variable">$&#123;MINIO_VOLUMES&#125;</span>\&quot; ] || echo \&quot;Variable MINIO_VOLUMES not set in /etc/minio/minio.conf\&quot;&quot;</span><br>ExecStart=/usr/bin/minio server <span class="hljs-variable">$MINO_OPTS</span> <span class="hljs-variable">$MINIO_VOLUMES</span><br>StandardOutput=journal<br>StandardError=inherit<br><span class="hljs-comment"># Specifies the maximum file descriptor number that can be opened by this process</span><br><br>LimitNOFILE=65536<br><span class="hljs-comment"># Disable timeout logic and wait until process is stopped</span><br>TimeoutStopSec=0<br><br><span class="hljs-comment"># SIGTERM signal is used to stop Minio</span><br>KillSignal=SIGTERM<br>SendSIGKILL=no<br>SuccessExitStatus=0<br><br>[Install]<br>WantedBy=multi-user.target<br></code></pre></td></tr></table></figure><h2 id="启动，停止命令"><a href="#启动，停止命令" class="headerlink" title="启动，停止命令"></a>启动，停止命令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl daemon-reload<br><span class="hljs-built_in">sudo</span> systemctl start minio.service<br><span class="hljs-built_in">sudo</span> systemctl stop minio.service<br><span class="hljs-built_in">sudo</span> systemctl restart minio.service<br></code></pre></td></tr></table></figure><h2 id="安装s3fs"><a href="#安装s3fs" class="headerlink" title="安装s3fs"></a>安装s3fs</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt install s3fs<br></code></pre></td></tr></table></figure><h2 id="挂载命令"><a href="#挂载命令" class="headerlink" title="挂载命令"></a>挂载命令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim ~/.passwd_s3fs<br>minio:minio<br><span class="hljs-built_in">chmod</span> 0600 ~/.passwd_s3f3<br></code></pre></td></tr></table></figure><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">s3fs <span class="hljs-built_in">test</span> /minio/ -o passwd_file=/home/deepstream/.passwd_s3fs -o url=http://127.0.0.1:9010/ -o use_path_request_style -o <span class="hljs-built_in">umask</span>=0002 -o uid=1000,gid=1000<br></code></pre></td></tr></table></figure><h2 id="调试参数"><a href="#调试参数" class="headerlink" title="调试参数"></a>调试参数</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">-o dbglevel=info -f -o curldbg<br></code></pre></td></tr></table></figure><h2 id="取消挂载"><a href="#取消挂载" class="headerlink" title="取消挂载"></a>取消挂载</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">fusermount -u /home/ai/record<br></code></pre></td></tr></table></figure><h2 id="指定用户，权限"><a href="#指定用户，权限" class="headerlink" title="指定用户，权限"></a>指定用户，权限</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">s3fs zxaidata ~/miniodata/ -o passwd_file=<span class="hljs-variable">$&#123;HOME&#125;</span>/.passwd_s3fs -o url=http://127.0.0.1:9010/ -o use_path_request_style -o dbglevel=info -f -o curldbg -o <span class="hljs-built_in">umask</span>=003 -o uid=1000,gid=1000<br></code></pre></td></tr></table></figure><h2 id="minio-启用ftp协议"><a href="#minio-启用ftp协议" class="headerlink" title="minio 启用ftp协议"></a>minio 启用ftp协议</h2><p><a href="https://minio.org.cn/docs/cn/minio/linux/developers/file-transfer-protocol.html">minio 启用ftp。sftp协议</a></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">./minio server /mnt/ --console-address 0.0.0.0:32120 --address 0.0.0.0:32119 --ftp=<span class="hljs-string">&quot;address=:32121&quot;</span> --ftp=<span class="hljs-string">&quot;passive-port-range=32122-42122&quot;</span><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>工具安装</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>mosquitto编译安装使用</title>
+    <link href="/2023/06/19/Linux_install_mosquitto/"/>
+    <url>/2023/06/19/Linux_install_mosquitto/</url>
+    
+    <content type="html"><![CDATA[<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Ubuntu</span><br><span class="hljs-built_in">sudo</span> apt install libssl-dev libwebsockets-dev uuid-dev libcjson-dev libc-ares-dev xsltproc docbook-xsl docbook-xml<br><br>git <span class="hljs-built_in">clone</span> https://github.com/DaveGamble/cJSON.git<br><span class="hljs-built_in">cd</span> cjson<br>make &amp;&amp; <span class="hljs-built_in">sudo</span> make install<br><br>git <span class="hljs-built_in">clone</span> https://github.com/eclipse/mosquitto.git<br><span class="hljs-built_in">cd</span> mosquitto<br><span class="hljs-built_in">mkdir</span> build &amp;&amp; <span class="hljs-built_in">cd</span> build<br>cmake -DWITH_SRV=<span class="hljs-built_in">yes</span> -DWITH_CJSON=<span class="hljs-built_in">yes</span> -DWITH_WEBSOCKETS=<span class="hljs-built_in">yes</span> -DWITH_TLS=<span class="hljs-built_in">yes</span> -DWITH_BUNDLED_DEPS=<span class="hljs-built_in">yes</span> -DWITH_DOCS=<span class="hljs-built_in">yes</span> ..<br>make &amp;&amp; <span class="hljs-built_in">sudo</span> make install<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">cp</span> ../service/systemd/mosquitto.service.simple /etc/systemd/system/mosquitto.service<br><span class="hljs-built_in">sudo</span> useradd -r -m -s /bin/bash mosquitto<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">mv</span> /usr/local/etc/mosquitto /etc/mosquitto<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">ln</span> -s /usr/local/sbin/mosquitto /usr/sbin/mosquitto<br></code></pre></td></tr></table></figure><h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> mosquitto_passwd -c /etc/mosquitto/pwfile admin<br></code></pre></td></tr></table></figure><p>基本ALC配置<br>创建好了认证之后，我们可能还需要对每个账户的权限进行控制，毕竟有的时候为了数据安全，不能允许所有的设备能完全订阅整个broker上的所有topic。</p><p>创建一个新的文件，比如起名叫aclfile，上述两个账户的权限举例如下：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># admin用户可以发布和订阅broker上面的所有主题</span><br>user admin<br>topic readwrite <span class="hljs-comment">#</span><br><br><span class="hljs-comment"># user用户 只有/iot/user/改主题的权限</span><br>user user<br>topic /iot/user/+<br></code></pre></td></tr></table></figure><p>这样就给admin赋予了所有topic的订阅及发布权限，而user只能在&#x2F;iot&#x2F;user&#x2F;+这个通配符权限下面进行订阅及发布。</p><p><em><strong>配置文件</strong></em></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 可以参照mosquitto.conf中的注释配置以下是常用配置</span><br><span class="hljs-comment"># 关闭匿名登录</span><br>allow_anonymous <span class="hljs-literal">false</span><br><span class="hljs-comment"># 密码文件</span><br>password_file /etc/mosquitto/pwfile<br><span class="hljs-comment"># 日志可以使用文件记录</span><br>log_dest file /var/logs/mosquitto.log<br><span class="hljs-comment"># 启动用户</span><br>user mosquitto<br><span class="hljs-comment"># 监听端口</span><br><span class="hljs-comment"># mqtt</span><br>listener 1883 0.0.0.0<br>protocol mqtt<br><span class="hljs-comment"># websocket</span><br>listener 8083 0.0.0.0<br>protocol websockets<br><span class="hljs-comment"># 最大连接数</span><br>max_connections -1<br></code></pre></td></tr></table></figure><h2 id="创建服务文件"><a href="#创建服务文件" class="headerlink" title="创建服务文件"></a>创建服务文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> vim /etc/systemd/system/mosquitto.service<br><br>[Unit]<br>Description=Mosquitto MQTT Broker<br>Documentation=man:mosquitto.conf(5) man:mosquitto(8)<br>After=network.target<br>Wants=network.target<br><br>[Service]<br>Type=simple<br>NotifyAccess=main<br>ExecStart=/usr/sbin/mosquitto -c /etc/mosquitto/mosquitto.conf<br>ExecReload=/bin/kill -HUP <span class="hljs-variable">$MAINPID</span><br>Restart=on-failure<br>ExecStartPre=/bin/mkdir -m 740 -p /var/log/mosquitto<br>ExecStartPre=/bin/chown mosquitto:mosquitto /var/log/mosquitto<br>ExecStartPre=/bin/mkdir -m 740 -p /run/mosquitto<br>ExecStartPre=/bin/chown mosquitto:mosquitto /run/mosquitto<br><br>[Install]<br>WantedBy=multi-user.target<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>工具安装</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Linux 安装mqtt</title>
+    <link href="/2023/06/19/Linux_install_mqtt/"/>
+    <url>/2023/06/19/Linux_install_mqtt/</url>
+    
+    <content type="html"><![CDATA[<p><a href="https://github.com/emqx/emqx/releases">下载地址</a></p><h2 id="ubuntu-install"><a href="#ubuntu-install" class="headerlink" title="ubuntu install"></a>ubuntu install</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">wget https://github.com/emqx/emqx/releases/download/v5.0.3/emqx-5.0.3-ubuntu18.04-amd64.deb<br><span class="hljs-built_in">sudo</span> apt install ./emqx-5.0.3-ubuntu18.04-amd64.deb<br></code></pre></td></tr></table></figure><h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl start emqx.service<br></code></pre></td></tr></table></figure><h2 id="查看状态"><a href="#查看状态" class="headerlink" title="查看状态"></a>查看状态</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl status emqx.service<br></code></pre></td></tr></table></figure><h2 id="加入开机自启动"><a href="#加入开机自启动" class="headerlink" title="加入开机自启动"></a>加入开机自启动</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl <span class="hljs-built_in">enable</span> emqx.service<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>工具安装</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>编译nginx</title>
+    <link href="/2023/06/19/Linux_install_nginx/"/>
+    <url>/2023/06/19/Linux_install_nginx/</url>
+    
+    <content type="html"><![CDATA[<h2 id="安装开发工具包"><a href="#安装开发工具包" class="headerlink" title="安装开发工具包"></a>安装开发工具包</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">Ubuntu : <span class="hljs-built_in">sudo</span> apt install build-essential<br>Centos : <span class="hljs-built_in">sudo</span> dnf group install <span class="hljs-string">&quot;Development Tools&quot;</span><br></code></pre></td></tr></table></figure><h2 id="下载安装包"><a href="#下载安装包" class="headerlink" title="下载安装包"></a>下载安装包</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">wget https://nginx.org/download/nginx-1.22.1.tar.gz -P ~/nginx<br></code></pre></td></tr></table></figure><h2 id="下载第三方依赖"><a href="#下载第三方依赖" class="headerlink" title="下载第三方依赖"></a>下载第三方依赖</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">wget https://www.openssl.org/source/openssl-1.1.1f.tar.gz -P ~/nginx<br>wget https://www.zlib.net/zlib-1.2.13.tar.gz -P ~/nginx<br>wget https://nchc.dl.sourceforge.net/project/pcre/pcre/8.45/pcre-8.45.tar.gz -P ~/nginx<br></code></pre></td></tr></table></figure><h2 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~/nginx<br>tar -zxvf nginx-1.22.0.tar.gz<br>tar -zxvf openssl-1.1.1f.tar.gz<br>tar -zxvf zlib-1.2.12.tar.gz<br>tar -zxvf pcre-8.45.tar.gz<br></code></pre></td></tr></table></figure><h2 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~/nginx/nginx-1.22.0/<br>./configure --prefix=/usr/local/nginx \<br>            --with-select_module \<br>            --with-poll_module \<br>            --with-threads \<br>            --with-file-aio \<br>            --with-http_ssl_module \<br>            --with-http_v2_module \<br>            --with-http_realip_module \<br>            --with-http_addition_module \<br>            --with-http_sub_module \<br>            --with-http_dav_module \<br>            --with-http_flv_module \<br>            --with-http_mp4_module \<br>            --with-http_gunzip_module \<br>            --with-http_gzip_static_module \<br>            --with-http_auth_request_module \<br>            --with-http_random_index_module \<br>            --with-http_secure_link_module \<br>            --with-http_degradation_module \<br>            --with-http_slice_module \<br>            --with-http_stub_status_module \<br>            --with-mail=dynamic \<br>            --with-mail_ssl_module \<br>            --with-stream \<br>            --with-stream_ssl_module \<br>            --with-stream_realip_module \<br>            --with-stream_ssl_preread_module \<br>            --with-compat \<br>            --with-pcre=../pcre-8.45 \<br>            --with-pcre-jit \<br>            --with-zlib=../zlib-1.2.13 \<br>            --with-openssl=../openssl-1.1.1f \<br>            --with-openssl-opt=no-nextprotoneg \<br>            --with-debug <br>make -j8<br><span class="hljs-built_in">sudo</span> make install<br></code></pre></td></tr></table></figure><h2 id="创建服务"><a href="#创建服务" class="headerlink" title="创建服务"></a>创建服务</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> vim /etc/systemd/system/nginx.service<br></code></pre></td></tr></table></figure><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash">[Unit]<br>Description=nginx - high performance web server<br>Documentation=http://nginx.org/en/docs<br>After=network.target remote-fs.target nss-lookup.target<br><br>[Service]<br>Type=forking<br>WorkingDirectory=/usr/local/nginx<br>PIDFile=/usr/local/nginx/logs/nginx.pid<br>ExecStartPre=/usr/local/nginx/sbin/nginx -t -c /usr/local/nginx/conf/nginx.conf<br>ExecStart=/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf<br>ExecReload=/bin/kill -s HUP <span class="hljs-variable">$MAINPID</span><br>ExecStop=/bin/kill -s QUIT <span class="hljs-variable">$MAINPID</span><br>PrivateTmp=<span class="hljs-literal">true</span><br><br>[Install]<br>WantedBy=multi-user.target<br></code></pre></td></tr></table></figure><h2 id="启动，停止，重启，加入开机自启动"><a href="#启动，停止，重启，加入开机自启动" class="headerlink" title="启动，停止，重启，加入开机自启动"></a>启动，停止，重启，加入开机自启动</h2><h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl start nginx.service<br></code></pre></td></tr></table></figure><h3 id="停止"><a href="#停止" class="headerlink" title="停止"></a>停止</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl stop nginx.service<br></code></pre></td></tr></table></figure><h3 id="重启"><a href="#重启" class="headerlink" title="重启"></a>重启</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl restart nginx.service<br></code></pre></td></tr></table></figure><h3 id="加入开机自启动"><a href="#加入开机自启动" class="headerlink" title="加入开机自启动"></a>加入开机自启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl <span class="hljs-built_in">enable</span> nginx.service<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>工具安装</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>NGINX</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Linux 安装redis</title>
+    <link href="/2023/06/19/Linux_install_redis/"/>
+    <url>/2023/06/19/Linux_install_redis/</url>
+    
+    <content type="html"><![CDATA[<p><a href="https://redis.io/">redis官方网站</a></p><h2 id="安装开发工具包"><a href="#安装开发工具包" class="headerlink" title="安装开发工具包"></a>安装开发工具包</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt install build-essential<br>yum groupinstall -y <span class="hljs-string">&quot;Development Tools&quot;</span><br></code></pre></td></tr></table></figure><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">wget https://download.redis.io/releases/redis-6.2.7.tar.gz<br>tar -zxvf redis-6.2.7.tar.gz<br><span class="hljs-built_in">cd</span> redis-6.2.7/<br>make<br><span class="hljs-built_in">sudo</span> make install<br><span class="hljs-built_in">sudo</span> vim /etc/sysctl.conf<br>net.core.somaxconn = 1024<br>vm.overcommit_memory = 1<br></code></pre></td></tr></table></figure><h2 id="例如创建redis的服务"><a href="#例如创建redis的服务" class="headerlink" title="例如创建redis的服务"></a>例如创建redis的服务</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> vim /etc/systemd/system/redis.service<br><br>[Unit]<br>Description=Advanced key-value store<br>After=network.target<br>Documentation=http://redis.io/documentation, man:redis-server(1)<br><br>[Service]<br>User=redis<br>WorkingDirectory=/usr/local/redis/<br>ExecStart=/usr/local/bin/redis-server /etc/redis/redis.conf<br>ExecStop=/bin/kill -s TERM <span class="hljs-variable">$MAINPID</span><br>PIDFile=/var/run/redis/redis-server.pid<br><span class="hljs-comment">#Restart=always</span><br>User=root<br>Group=root<br>PrivateTmp=<span class="hljs-literal">true</span><br><br>[Install]<br>WantedBy=multi-user.target<br>Alias=redis.service<br><br></code></pre></td></tr></table></figure><p><em><strong>刷新服务列表</strong></em></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl daemon-reload<br></code></pre></td></tr></table></figure><p><em><strong>启动，停止，重启</strong></em></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl start:stop:restart:status redis.service<br></code></pre></td></tr></table></figure><p><em><strong>按照自己的需要修改redis配置文件</strong></em></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>工具安装</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>RSYNC 的简单使用</title>
+    <link href="/2023/06/19/Linux_rsync/"/>
+    <url>/2023/06/19/Linux_rsync/</url>
+    
+    <content type="html"><![CDATA[<p>–progress 选项来显示进度</p><p>-z: –compress 使用压缩机制</p><p>-v: –verbose 打印详细信息</p><p>-r: –recursive 以递归模式同步子目录</p><p>-l, –links: 将符号链接当作符号链接文件拷贝, 不拷贝符合链接指向的文件内容.</p><p>-p, –perms: 保留文件权限</p><p>-t, –times: 保留修改时间戳</p><p>-g, –group: 保留用户组信息</p><p>-o, –owner: 保留用户信息(需要超级用户权限)</p><p>-D, 相当于 –devices –specials 的组合, 保留设备文件, 保留特殊文件.</p><p>rsync -avrptg –progress &#x2F;home&#x2F;admin123&#x2F;miniodata&#x2F;events&#x2F;wf&#x2F; &#x2F;home&#x2F;admin123&#x2F;huawei&#x2F;</p><hr><h2 id="下面是rsync中可用选项的简短摘要。请参阅下面的详细说明以获得完整的说明"><a href="#下面是rsync中可用选项的简短摘要。请参阅下面的详细说明以获得完整的说明" class="headerlink" title="下面是rsync中可用选项的简短摘要。请参阅下面的详细说明以获得完整的说明"></a>下面是rsync中可用选项的简短摘要。请参阅下面的详细说明以获得完整的说明</h2><table><thead><tr><th align="left">短参数</th><th align="left">长参数</th><th align="left">英文解析</th><th align="left">中文解析</th></tr></thead><tbody><tr><td align="left">-v,</td><td align="left">–verbose</td><td align="left">increase verbosity</td><td align="left">增加详细信息</td></tr><tr><td align="left"></td><td align="left">–info&#x3D;FLAGS</td><td align="left">fine-grained informational verbosity</td><td align="left">细粒度的信息冗长</td></tr><tr><td align="left"></td><td align="left">–debug&#x3D;FLAGS</td><td align="left">fine-grained debug verbosity</td><td align="left">细粒度的调试细节</td></tr><tr><td align="left"></td><td align="left">–msgs2stderr</td><td align="left">special output handling for debugging</td><td align="left">调试专用输出处理</td></tr><tr><td align="left">-q,</td><td align="left">–quiet</td><td align="left">suppress non-error messages</td><td align="left">抑制非错误消息</td></tr><tr><td align="left"></td><td align="left">–no-motd</td><td align="left">suppress daemon-mode MOTD (see manpage caveat)</td><td align="left">禁止守护模式MOTD(参见manpage警告)</td></tr><tr><td align="left">-c,</td><td align="left">–checksum</td><td align="left">skip based on checksum, not mod-time &amp; size</td><td align="left">跳过基于校验和，而不是mod时间和大小</td></tr><tr><td align="left">-a,</td><td align="left">–archive</td><td align="left">archive mode; equals -rlptgoD (no -H,-A,-X)</td><td align="left">归档模式;&#x3D; -rlptgoD(没有-H，-A，-X)</td></tr><tr><td align="left"></td><td align="left">–no-OPTION</td><td align="left">turn off an implied OPTION (e.g. –no-D)</td><td align="left">关闭一个隐含的选项(例如——no-D)</td></tr><tr><td align="left">-r,</td><td align="left">–recursive</td><td align="left">recurse into directories</td><td align="left">递归到目录</td></tr><tr><td align="left">-R,</td><td align="left">–relative</td><td align="left">use relative path names</td><td align="left">使用相对路径名</td></tr><tr><td align="left"></td><td align="left">–no-implied-dirs</td><td align="left">don’t send implied dirs with –relative</td><td align="left">不要用-relative发送暗示的脏话</td></tr><tr><td align="left">-b,</td><td align="left">–backup</td><td align="left">make backups (see –suffix &amp; –backup-dir)</td><td align="left">进行备份(参见——suffix &amp;——backup-dir)</td></tr><tr><td align="left"></td><td align="left">–backup-dir&#x3D;DIR</td><td align="left">make backups into hierarchy based in DIR</td><td align="left">将备份简化为基于DIR的层次结构</td></tr><tr><td align="left"></td><td align="left">–suffix&#x3D;SUFFIX</td><td align="left">set backup suffix (default ~ w&#x2F;o –backup-dir)</td><td align="left">设置备份后缀(默认~ w&#x2F;o——backup-dir)</td></tr><tr><td align="left">-u,</td><td align="left">–update</td><td align="left">skip files that are newer on the receiver</td><td align="left">跳过接收端上更新的文件</td></tr><tr><td align="left"></td><td align="left">–inplace</td><td align="left">update destination files in-place (SEE MAN PAGE)</td><td align="left">就地更新目标文件(参见手册页)</td></tr><tr><td align="left"></td><td align="left">–append</td><td align="left">append data onto shorter files</td><td align="left">将数据追加到较短的文件中</td></tr><tr><td align="left"></td><td align="left">–append-verify</td><td align="left">like –append, but with old data in file checksum</td><td align="left">类似于——append，但在文件校验和中使用旧数据</td></tr><tr><td align="left">-d,</td><td align="left">–dirs</td><td align="left">transfer directories without recursing</td><td align="left">不递归地传输目录</td></tr><tr><td align="left">-l,</td><td align="left">–links</td><td align="left">copy symlinks as symlinks</td><td align="left">将符号链接复制为符号链接</td></tr><tr><td align="left">-L,</td><td align="left">–copy-links</td><td align="left">transform symlink into referent file&#x2F;dir</td><td align="left">转换符号链接到引用文件&#x2F;目录</td></tr><tr><td align="left"></td><td align="left">–copy-unsafe-links</td><td align="left">only “unsafe” symlinks are transformed</td><td align="left">只有“不安全”的符号链接被转换</td></tr><tr><td align="left"></td><td align="left">–safe-links</td><td align="left">ignore symlinks that point outside the source tree</td><td align="left">忽略指向源树外部的符号链接</td></tr><tr><td align="left"></td><td align="left">–munge-links</td><td align="left">munge symlinks to make them safer (but unusable)</td><td align="left">芒格符号链接使它们更安全(但不能使用)</td></tr><tr><td align="left">-k,</td><td align="left">–copy-dirlinks</td><td align="left">transform symlink to a dir into referent dir</td><td align="left">转换符号链接到一个目录到引用目录</td></tr><tr><td align="left">-K,</td><td align="left">–keep-dirlinks</td><td align="left">treat symlinked dir on receiver as dir</td><td align="left">将接收器上的符号链接dir处理为dir</td></tr><tr><td align="left">-H,</td><td align="left">–hard-links</td><td align="left">preserve hard links</td><td align="left">保留硬链接</td></tr><tr><td align="left">-p,</td><td align="left">–perms</td><td align="left">preserve permissions</td><td align="left">保存权限</td></tr><tr><td align="left">-E,</td><td align="left">–executability</td><td align="left">preserve the file’s executability</td><td align="left">保留文件的可执行性</td></tr><tr><td align="left"></td><td align="left">–chmod&#x3D;CHMOD</td><td align="left">affect file and&#x2F;or directory permissions</td><td align="left">影响文件和&#x2F;或目录权限</td></tr><tr><td align="left">-A,</td><td align="left">–acls</td><td align="left">preserve ACLs (implies –perms)</td><td align="left">保存acl(暗示—perms)</td></tr><tr><td align="left">-X,</td><td align="left">–xattrs</td><td align="left">preserve extended attributes</td><td align="left">保留扩展属性</td></tr><tr><td align="left">-o,</td><td align="left">–owner</td><td align="left">preserve owner (super-user only)</td><td align="left">保留所有者(仅限超级用户)</td></tr><tr><td align="left">-g,</td><td align="left">–group</td><td align="left">preserve group</td><td align="left">保护组</td></tr><tr><td align="left"></td><td align="left">–devices</td><td align="left">preserve device files (super-user only)</td><td align="left">保存设备文件(只有超级用户)</td></tr><tr><td align="left"></td><td align="left">–copy-devices</td><td align="left">copy device contents as regular file</td><td align="left">将设备内容复制为常规文件</td></tr><tr><td align="left"></td><td align="left">–specials</td><td align="left">preserve special files</td><td align="left">保存特殊文件</td></tr><tr><td align="left">-D</td><td align="left"></td><td align="left">same as –devices –specials</td><td align="left">和——设备——特价一样</td></tr><tr><td align="left">-t,</td><td align="left">–times</td><td align="left">preserve modification times</td><td align="left">保留修改时间</td></tr><tr><td align="left">-O,</td><td align="left">–omit-dir-times</td><td align="left">omit directories from –times</td><td align="left">省略——times中的目录</td></tr><tr><td align="left">-J,</td><td align="left">–omit-link-times</td><td align="left">omit symlinks from –times</td><td align="left">省略——times中的符号链接</td></tr><tr><td align="left"></td><td align="left">–super</td><td align="left">receiver attempts super-user activities</td><td align="left">接收者尝试超级用户活动</td></tr><tr><td align="left"></td><td align="left">–fake-super</td><td align="left">store&#x2F;recover privileged attrs using xattrs</td><td align="left">使用xattrs存储&#x2F;恢复特权attrs</td></tr><tr><td align="left">-S,</td><td align="left">–sparse</td><td align="left">handle sparse files efficiently</td><td align="left">有效处理稀疏文件</td></tr><tr><td align="left"></td><td align="left">–preallocate</td><td align="left">allocate dest files before writing them</td><td align="left">在写dest文件之前分配它们</td></tr><tr><td align="left">-n,</td><td align="left">–dry-run</td><td align="left">perform a trial run with no changes made</td><td align="left">执行不做任何更改的试运行</td></tr><tr><td align="left">-W,</td><td align="left">–whole-file</td><td align="left">copy files whole (without delta-xfer algorithm)</td><td align="left">完整复制文件(没有delta-xfer算法)</td></tr><tr><td align="left">-x,</td><td align="left">–one-file-system</td><td align="left">don’t cross filesystem boundaries</td><td align="left">不要跨越文件系统边界</td></tr><tr><td align="left">-B,</td><td align="left">–block-size&#x3D;SIZE</td><td align="left">force a fixed checksum block-size</td><td align="left">强制一个固定的校验和块大小</td></tr><tr><td align="left">-e,</td><td align="left">–rsh&#x3D;COMMAND</td><td align="left">specify the remote shell to use</td><td align="left">指定要使用的远程shell</td></tr><tr><td align="left"></td><td align="left">–rsync-path&#x3D;PROGRAM</td><td align="left">specify the rsync to run on the remote machine</td><td align="left">指定要在远程计算机上运行的rsync</td></tr><tr><td align="left"></td><td align="left">–existing</td><td align="left">skip creating new files on receiver</td><td align="left">跳过在接收器上创建新文件</td></tr><tr><td align="left"></td><td align="left">–ignore-existing</td><td align="left">skip updating files that already exist on receiver</td><td align="left">跳过更新接收器上已经存在的文件</td></tr><tr><td align="left"></td><td align="left">–remove-source-files</td><td align="left">sender removes synchronized files (non-dirs)</td><td align="left">发送方删除同步文件(非dirs)</td></tr><tr><td align="left"></td><td align="left">–del</td><td align="left">an alias for –delete-during</td><td align="left">–delete-during的别名。</td></tr><tr><td align="left"></td><td align="left">–delete</td><td align="left">delete extraneous files from destination dirs</td><td align="left">从目标dirs中删除无关文件</td></tr><tr><td align="left"></td><td align="left">–delete-before</td><td align="left">receiver deletes before transfer, not during</td><td align="left">接收者在传输前删除，而不是在传输期间删除</td></tr><tr><td align="left"></td><td align="left">–delete-during</td><td align="left">receiver deletes during the transfer</td><td align="left">接收方在传输过程中删除</td></tr><tr><td align="left"></td><td align="left">–delete-delay</td><td align="left">find deletions during, delete after</td><td align="left">查找删除期间，删除后</td></tr><tr><td align="left"></td><td align="left">–delete-after</td><td align="left">receiver deletes after transfer, not during</td><td align="left">接收者在传输后删除，而不是在传输期间删除</td></tr><tr><td align="left"></td><td align="left">–delete-excluded</td><td align="left">also delete excluded files from destination dirs</td><td align="left">还可以从目标dirs中删除排除的文件</td></tr><tr><td align="left"></td><td align="left">–ignore-missing-args</td><td align="left">ignore missing source args without error</td><td align="left">忽略缺少的源参数而不出错</td></tr><tr><td align="left"></td><td align="left">–delete-missing-args</td><td align="left">delete missing source args from destination</td><td align="left">从目标中删除缺少的源参数</td></tr><tr><td align="left"></td><td align="left">–ignore-errors</td><td align="left">delete even if there are I&#x2F;O errors</td><td align="left">删除即使有I&#x2F;O错误</td></tr><tr><td align="left"></td><td align="left">–force</td><td align="left">force deletion of directories even if not empty</td><td align="left">强制删除目录，即使不是空的</td></tr><tr><td align="left"></td><td align="left">–max-delete&#x3D;NUM</td><td align="left">don’t delete more than NUM files</td><td align="left">不要删除超过NUM个文件</td></tr><tr><td align="left"></td><td align="left">–max-size&#x3D;SIZE</td><td align="left">don’t transfer any file larger than SIZE</td><td align="left">不要传输任何大于SIZE的文件</td></tr><tr><td align="left"></td><td align="left">–min-size&#x3D;SIZE</td><td align="left">don’t transfer any file smaller than SIZE</td><td align="left">不要传输任何小于SIZE的文件</td></tr><tr><td align="left"></td><td align="left">–partial</td><td align="left">keep partially transferred files</td><td align="left">保留部分传输的文件</td></tr><tr><td align="left"></td><td align="left">–partial-dir&#x3D;DIR</td><td align="left">put a partially transferred file into DIR</td><td align="left">将部分传输的文件放入DIR</td></tr><tr><td align="left"></td><td align="left">–delay-updates</td><td align="left">put all updated files into place at transfer’s end</td><td align="left">在传输结束时，将所有更新的文件放到合适的位置</td></tr><tr><td align="left">-m,</td><td align="left">–prune-empty-dirs</td><td align="left">prune empty directory chains from the file-list</td><td align="left">从文件列表中删除空目录链</td></tr><tr><td align="left"></td><td align="left">–numeric-ids</td><td align="left">don’t map uid&#x2F;gid values by user&#x2F;group name</td><td align="left">不要根据用户&#x2F;组名映射uid&#x2F;gid值</td></tr><tr><td align="left"></td><td align="left">–usermap&#x3D;STRING</td><td align="left">custom username mapping</td><td align="left">自定义用户名映射</td></tr><tr><td align="left"></td><td align="left">–groupmap&#x3D;STRING</td><td align="left">custom groupname mapping</td><td align="left">自定义组名映射</td></tr><tr><td align="left"></td><td align="left">–chown&#x3D;USER:GROUP</td><td align="left">simple username&#x2F;groupname mapping</td><td align="left">简单的用户名&#x2F;组名映射</td></tr><tr><td align="left"></td><td align="left">–timeout&#x3D;SECONDS</td><td align="left">set I&#x2F;O timeout in seconds</td><td align="left">设置I&#x2F;O超时时间，单位为秒</td></tr><tr><td align="left"></td><td align="left">–contimeout&#x3D;SECONDS</td><td align="left">set daemon connection timeout in seconds</td><td align="left">设置守护进程连接超时时间，单位为秒</td></tr><tr><td align="left">-I,</td><td align="left">–ignore-times</td><td align="left">don’t skip files that match in size and mod-time</td><td align="left">不要跳过大小和mod-time匹配的文件</td></tr><tr><td align="left">-M,</td><td align="left">–remote-option&#x3D;OPTION</td><td align="left">send OPTION to the remote side only</td><td align="left">只发送OPTION到远端</td></tr><tr><td align="left"></td><td align="left">–size-only</td><td align="left">skip files that match in size</td><td align="left">跳过大小匹配的文件</td></tr><tr><td align="left"></td><td align="left">–modify-window&#x3D;NUM</td><td align="left">compare mod-times with reduced accuracy</td><td align="left">比较精度降低的现代时间</td></tr><tr><td align="left">-T,</td><td align="left">–temp-dir&#x3D;DIR</td><td align="left">create temporary files in directory DIR</td><td align="left">在DIR目录下创建临时文件</td></tr><tr><td align="left">-y,</td><td align="left">–fuzzy</td><td align="left">find similar file for basis if no dest file</td><td align="left">如果没有dest文件，请查找相似的文件作为依据</td></tr><tr><td align="left"></td><td align="left">–compare-dest&#x3D;DIR</td><td align="left">also compare destination files relative to DIR</td><td align="left">也比较目标文件相对于DIR</td></tr><tr><td align="left"></td><td align="left">–copy-dest&#x3D;DIR</td><td align="left">… and include copies of unchanged files</td><td align="left">…并包括未更改文件的副本</td></tr><tr><td align="left"></td><td align="left">–link-dest&#x3D;DIR</td><td align="left">hardlink to files in DIR when unchanged</td><td align="left">硬链接到文件在DIR未改变</td></tr><tr><td align="left">-z,</td><td align="left">–compress</td><td align="left">compress file data during the transfer</td><td align="left">在传输过程中压缩文件数据</td></tr><tr><td align="left"></td><td align="left">–compress-level&#x3D;NUM</td><td align="left">explicitly set compression level</td><td align="left">显式设置压缩级别</td></tr><tr><td align="left"></td><td align="left">–skip-compress&#x3D;LIST</td><td align="left">skip compressing files with a suffix in LIST</td><td align="left">跳过压缩带有LIST后缀的文件</td></tr><tr><td align="left">-C,</td><td align="left">–cvs-exclude</td><td align="left">auto-ignore files the same way CVS does</td><td align="left">自动忽略文件的方式与CVS相同</td></tr><tr><td align="left">-f,</td><td align="left">–filter&#x3D;RULE</td><td align="left">add a file-filtering RULE</td><td align="left">添加文件过滤规则</td></tr><tr><td align="left">-F</td><td align="left"></td><td align="left">same as –filter&#x3D;’dir-merge &#x2F;.rsync-filter’</td><td align="left">一样 –filter&#x3D;’dir-merge &#x2F;.rsync-filter’</td></tr><tr><td align="left"></td><td align="left"></td><td align="left">repeated: –filter&#x3D;’- .rsync-filter’</td><td align="left">重复:–filter&#x3D;’- .rsync-filter’</td></tr><tr><td align="left"></td><td align="left">–exclude&#x3D;PATTERN</td><td align="left">exclude files matching PATTERN</td><td align="left">排除匹配的文件</td></tr><tr><td align="left"></td><td align="left">–exclude-from&#x3D;FILE</td><td align="left">read exclude patterns from FILE</td><td align="left">从文件中读取排除模式</td></tr><tr><td align="left"></td><td align="left">–include&#x3D;PATTERN</td><td align="left">don’t exclude files matching PATTERN</td><td align="left">不排除匹配PATTERN的文件</td></tr><tr><td align="left"></td><td align="left">–include-from&#x3D;FILE</td><td align="left">read include patterns from FILE</td><td align="left">从FILE中读取包含模式</td></tr><tr><td align="left"></td><td align="left">–files-from&#x3D;FILE</td><td align="left">read list of source-file names from FILE</td><td align="left">从文件中读取源文件名列表</td></tr><tr><td align="left">-0,</td><td align="left">–from0</td><td align="left">all *-from&#x2F;filter files are delimited by 0s</td><td align="left">所有*-from&#x2F;filter文件都以0分隔</td></tr><tr><td align="left">-s,</td><td align="left">–protect-args</td><td align="left">no space-splitting; only wildcard special-chars</td><td align="left">没有空间分裂;只有通配符特殊字符</td></tr><tr><td align="left"></td><td align="left">–address&#x3D;ADDRESS</td><td align="left">bind address for outgoing socket to daemon</td><td align="left">为外出套接字绑定守护进程的地址</td></tr><tr><td align="left"></td><td align="left">–port&#x3D;PORT</td><td align="left">specify double-colon alternate port number</td><td align="left">指定双冒号替代端口号</td></tr><tr><td align="left"></td><td align="left">–sockopts&#x3D;OPTIONS</td><td align="left">specify custom TCP options</td><td align="left">指定自定义TCP选项</td></tr><tr><td align="left"></td><td align="left">–blocking-io</td><td align="left">use blocking I&#x2F;O for the remote shell</td><td align="left">对远程shell使用阻塞I&#x2F;O</td></tr><tr><td align="left"></td><td align="left">–stats</td><td align="left">give some file-transfer stats</td><td align="left">给出一些文件传输数据</td></tr><tr><td align="left">-8,</td><td align="left">–8-bit-output</td><td align="left">leave high-bit chars unescaped in output</td><td align="left">在输出中不转义高位字符</td></tr><tr><td align="left">-h,</td><td align="left">–human-readable</td><td align="left">output numbers in a human-readable format</td><td align="left">以人类可读的格式输出数字</td></tr><tr><td align="left"></td><td align="left">–progress</td><td align="left">show progress during transfer</td><td align="left">在转移过程中显示进度</td></tr><tr><td align="left">-P</td><td align="left"></td><td align="left">same as –partial –progress</td><td align="left">和部分进展一样</td></tr><tr><td align="left">-i,</td><td align="left">–itemize-changes</td><td align="left">output a change-summary for all updates</td><td align="left">为所有更新输出更改摘要</td></tr><tr><td align="left"></td><td align="left">–out-format&#x3D;FORMAT</td><td align="left">output updates using the specified FORMAT</td><td align="left">使用指定的格式输出更新</td></tr><tr><td align="left"></td><td align="left">–log-file&#x3D;FILE</td><td align="left">log what we’re doing to the specified FILE</td><td align="left">记录我们对指定的FILE所做的事情</td></tr><tr><td align="left"></td><td align="left">–log-file-format&#x3D;FMT</td><td align="left">log updates using the specified FMT</td><td align="left">日志更新使用指定的FMT</td></tr><tr><td align="left"></td><td align="left">–password-file&#x3D;FILE</td><td align="left">read daemon-access password from FILE</td><td align="left">从FILE中读取daemon-access密码</td></tr><tr><td align="left"></td><td align="left">–list-only</td><td align="left">list the files instead of copying them</td><td align="left">列出文件，而不是复制它们</td></tr><tr><td align="left"></td><td align="left">–bwlimit&#x3D;RATE</td><td align="left">limit socket I&#x2F;O bandwidth</td><td align="left">限制socket I&#x2F;O带宽</td></tr><tr><td align="left"></td><td align="left">–stop-at&#x3D;y-m-dTh:m</td><td align="left">Stop rsync at year-month-dayThour:minute</td><td align="left">在年-月-日小时:分钟停止rsync</td></tr><tr><td align="left"></td><td align="left">–time-limit&#x3D;MINS</td><td align="left">Stop rsync after MINS minutes have elapsed</td><td align="left">在经过MINS分钟后停止rsync</td></tr><tr><td align="left"></td><td align="left">–outbuf&#x3D;N</td><td align="left">L</td><td align="left">B</td></tr><tr><td align="left"></td><td align="left">–write-batch&#x3D;FILE</td><td align="left">write a batched update to FILE</td><td align="left">将批处理更新写入FILE</td></tr><tr><td align="left"></td><td align="left">–only-write-batch&#x3D;FILE</td><td align="left">like –write-batch but w&#x2F;o updating destination</td><td align="left">类似于——write-batch，但w&#x2F;o更新目标</td></tr><tr><td align="left"></td><td align="left">–read-batch&#x3D;FILE</td><td align="left">read a batched update from FILE</td><td align="left">从FILE中读取批处理更新</td></tr><tr><td align="left"></td><td align="left">–protocol&#x3D;NUM</td><td align="left">force an older protocol version to be used</td><td align="left">强制使用较旧的协议版本</td></tr><tr><td align="left"></td><td align="left">–iconv&#x3D;CONVERT_SPEC</td><td align="left">request charset conversion of filenames</td><td align="left">请求文件名的字符集转换</td></tr><tr><td align="left"></td><td align="left">–checksum-seed&#x3D;NUM</td><td align="left">set block&#x2F;file checksum seed (advanced)</td><td align="left">设置块&#x2F;文件校验和种子(高级)</td></tr><tr><td align="left"></td><td align="left">–noatime</td><td align="left">do not alter atime when opening source files</td><td align="left">打开源文件时不更改时间</td></tr><tr><td align="left">-4,</td><td align="left">–ipv4</td><td align="left">prefer IPv4</td><td align="left"></td></tr><tr><td align="left">-6,</td><td align="left">–ipv6</td><td align="left">prefer IPv6</td><td align="left"></td></tr><tr><td align="left"></td><td align="left">–version</td><td align="left">print version number</td><td align="left">打印版本号</td></tr><tr><td align="left">-h,</td><td align="left">–help</td><td align="left">show this help (-h is –help only if used alone)</td><td align="left">显示这个帮助(-h是–help仅用于单独使用)</td></tr></tbody></table>]]></content>
+    
+    
+    <categories>
+      
+      <category>Linux 命令</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>ubuntu 18.04 server 配置IP地址</title>
+    <link href="/2023/06/19/Ubuntu_server_settings_ipaddress/"/>
+    <url>/2023/06/19/Ubuntu_server_settings_ipaddress/</url>
+    
+    <content type="html"><![CDATA[<h2 id="编译Netplan-配置文件"><a href="#编译Netplan-配置文件" class="headerlink" title="编译Netplan 配置文件"></a>编译Netplan 配置文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> vim /etc/netplan/50-cloud-init.yaml<br></code></pre></td></tr></table></figure><h2 id="配置网络IP和路由"><a href="#配置网络IP和路由" class="headerlink" title="配置网络IP和路由"></a>配置网络IP和路由</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">network:<br>  version: 2<br>  ethernets:<br>    ens33:<br>      dhcp4: <span class="hljs-literal">false</span><br>      optional: <span class="hljs-literal">false</span><br>      addresses: [&lt;IP地址&gt;/&lt;子网掩码&gt;]<br>      gateway4: &lt;网关地址&gt;<br>      routes:<br>        - to: 192.168.1.0/24<br>          via: &lt;网关地址&gt;<br></code></pre></td></tr></table></figure><h2 id="在上述配置中"><a href="#在上述配置中" class="headerlink" title="在上述配置中"></a>在上述配置中</h2><ul><li>ens33：是网络接口的名称，具体名称会因系统而异，可以使用ifconfig或ip addr命令查看</li><li>dhcp4: no：表示不使用DHCP自动获取IP地址配置信息，而是配手动置IP地址</li><li>addresses: [&lt;IP地址&gt;&#x2F;&lt;子网掩码&gt;]：用于配置静态IP地址和子网掩码，例如192.168.1.100&#x2F;24</li><li>gateway4: &lt;网关地址&gt;：表示默认的网关地址</li><li>routes：用于添加静态路由，可以配置多个静态路由</li></ul><h2 id="应用Netplan配置，可以使用以下命令"><a href="#应用Netplan配置，可以使用以下命令" class="headerlink" title="应用Netplan配置，可以使用以下命令"></a>应用Netplan配置，可以使用以下命令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> netplan apply<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Linux 基础</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Linux 创建系统用户</title>
+    <link href="/2023/06/19/linux_add_user/"/>
+    <url>/2023/06/19/linux_add_user/</url>
+    
+    <content type="html"><![CDATA[<h2 id="以root-用户登陆"><a href="#以root-用户登陆" class="headerlink" title="以root 用户登陆"></a>以root 用户登陆</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">useradd -r -m -s /bin/bash username<br></code></pre></td></tr></table></figure><ul><li>参数说明：</li><li>-r：建立系统账号</li><li>-m：自动建立用户的登入目录</li><li>-s：指定用户登入后所使用的shell</li></ul><p><em><strong>-s 参数&#x2F;sbin&#x2F;nologin 这是一个不允许用户登录的shell</strong></em></p><h2 id="修改新建用户的登陆密码"><a href="#修改新建用户的登陆密码" class="headerlink" title="修改新建用户的登陆密码"></a>修改新建用户的登陆密码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">passwd username<br></code></pre></td></tr></table></figure><h2 id="将新建用户添加"><a href="#将新建用户添加" class="headerlink" title="将新建用户添加"></a>将新建用户添加</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">usermod -aG <span class="hljs-built_in">sudo</span> username<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Linux 命令</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>find 的简单使用</title>
+    <link href="/2023/06/19/linux_find/"/>
+    <url>/2023/06/19/linux_find/</url>
+    
+    <content type="html"><![CDATA[<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs txt">Usage: find [-H] [-L] [-P] [-Olevel] [-D debugopts] [path...] [expression]<br><br>默认路径为当前目录；默认表达式为 -print<br>表达式可能由下列成份组成：操作符、选项、测试表达式以及动作：<br>操作符 (优先级递减；未做任何指定时默认使用 -and):<br>      ( EXPR )   ! EXPR   -not EXPR   EXPR1 -a EXPR2   EXPR1 -and EXPR2<br>      EXPR1 -o EXPR2   EXPR1 -or EXPR2   EXPR1 , EXPR2<br>positional options (always true): -daystart -follow -regextype<br><br>normal options (always true, specified before other expressions):<br>      -depth --help -maxdepth LEVELS -mindepth LEVELS -mount -noleaf<br>      --version -xautofs -xdev -ignore_readdir_race -noignore_readdir_race<br>比较测试 (N 可以是 +N 或 -N 或 N): -amin N -anewer FILE -atime N -cmin N<br>      -cnewer 文件 -ctime N -empty -false -fstype 类型 -gid N -group 名称<br>      -ilname 匹配模式 -iname 匹配模式 -inum N -ipath 匹配模式 -iregex 匹配模式<br>      -links N -lname 匹配模式 -mmin N -mtime N -name 匹配模式 -newer 文件<br>      -nouser -nogroup -path PATTERN -perm [-/]MODE -regex PATTERN<br>      -readable -writable -executable<br>      -wholename PATTERN -size N[bcwkMG] -true -type [bcdpflsD] -uid N<br>      -used N -user NAME -xtype [bcdpfls]      -context 文本<br><br>actions: -delete -print0 -printf FORMAT -fprintf FILE FORMAT -print<br>      -fprint0 FILE -fprint FILE -ls -fls FILE -prune -quit<br>      -exec COMMAND ; -exec COMMAND &#123;&#125; + -ok COMMAND ;<br>      -execdir COMMAND ; -execdir COMMAND &#123;&#125; + -okdir COMMAND ;<br><br>Valid arguments for -D:<br>exec, opt, rates, search, stat, time, tree, all, help<br>Use &#x27;-D help&#x27; for a description of the options, or see find(1)<br><br>Please see also the documentation at http://www.gnu.org/software/findutils/.<br>You can report (and track progress on fixing) bugs in the &quot;find&quot;<br>program via the GNU findutils bug-reporting page at<br>https://savannah.gnu.org/bugs/?group=findutils or, if<br>you have no web access, by sending email to &lt;bug-findutils@gnu.org&gt;.<br></code></pre></td></tr></table></figure><h2 id="删除一天前的coredump文件"><a href="#删除一天前的coredump文件" class="headerlink" title="删除一天前的coredump文件"></a>删除一天前的coredump文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">/usr/bin/find /tmp -mtime +1 -delete<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Linux 命令</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>linux 创建service</title>
+    <link href="/2023/06/19/linux_create_service/"/>
+    <url>/2023/06/19/linux_create_service/</url>
+    
+    <content type="html"><![CDATA[<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><ul><li>Linux下面的系统自启动服务是有systemd 管理的（之前是在init文件夹中写脚本）</li><li>linux下面有两个地方可以放service文件、一个是&#x2F;lib&#x2F;systemd&#x2F;system，这个是系统服务的位置，一般情况下我们自己建立的服务需要放在&#x2F;etc&#x2F;systemd&#x2F;system文件夹下面和系统服务分开</li></ul><h2 id="例如创建nginx的服务"><a href="#例如创建nginx的服务" class="headerlink" title="例如创建nginx的服务"></a>例如创建nginx的服务</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> vim /etc/systemd/system/redis.service<br><br><br>[Unit]<br>Description=redis server<br>After=network.target remote-fs.target nss-lookup.target<br><br>[Service]<br>User=root<br>Type=forking<br>WorkingDirectory=/usr/local/redis<br>PIDFile=/usr/local/redis/redis.pid<br>ExecStart=/usr/local/bin/redis-server /etc/redis/redis.conf<br>ExecReload=/bin/kill -s HUP <span class="hljs-variable">$MAINPID</span><br>ExecStop=/bin/kill -s QUIT <span class="hljs-variable">$MAINPID</span><br>PrivateTmp=<span class="hljs-literal">true</span><br><br>[Install]<br>WantedBy=multi-user.target<br></code></pre></td></tr></table></figure><p><em><strong>刷新服务列表</strong></em></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl daemon-reload<br></code></pre></td></tr></table></figure><p><em><strong>启动，停止，重启</strong></em></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl start:stop:restart:status nginx.service<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Linux 命令</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>挂载网络位置</title>
+    <link href="/2023/06/19/linux_mount_Network_location/"/>
+    <url>/2023/06/19/linux_mount_Network_location/</url>
+    
+    <content type="html"><![CDATA[<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt install -y cifs-utils<br></code></pre></td></tr></table></figure><h2 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> /bin/mount.cifs -o username=allclient,password=allclient,gid=<span class="hljs-string">&quot;1000&quot;</span>,uid=<span class="hljs-string">&quot;1000&quot;</span>,vers=3.0 //monitor.com/QP/Minio_Data /opt/Minio_Data<br></code></pre></td></tr></table></figure><h2 id="卸载"><a href="#卸载" class="headerlink" title="卸载"></a>卸载</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> /bin/umount /opt/Minio_Data<br></code></pre></td></tr></table></figure><h2 id="自动挂载"><a href="#自动挂载" class="headerlink" title="自动挂载"></a>自动挂载</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> vim /etc/fstab<br><span class="hljs-comment"># NFS</span><br>//monitor.com/QP/Minio_Data /opt/Minio_Data cifs    username=allclient,password=allclient,gid=1000,uid=1000,vers=3.0    0   1<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Linux 命令</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>linux install jdk 8</title>
+    <link href="/2023/06/19/linux_install_jdk/"/>
+    <url>/2023/06/19/linux_install_jdk/</url>
+    
+    <content type="html"><![CDATA[<h2 id="download-jdk-8"><a href="#download-jdk-8" class="headerlink" title="download jdk 8"></a>download jdk 8</h2><p><a href="https://www.oracle.com/cn/java/technologies/javase/javase8-archive-downloads.html">下载地址</a></p><p>  <em><strong>下载： jdk-8u144-linux-x64.tar.gz</strong></em></p><h2 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h2><ul><li>将下载的包解压到&#x2F;usr&#x2F;local&#x2F;java</li></ul><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> tar -xf jdk-8u144-linux-x64.tar.gz -C /usr/local/java<br><span class="hljs-built_in">sudo</span> vim /etc/profile.d/java.sh<br><br><span class="hljs-built_in">export</span> JAVA_HOME=/usr/local/java<br><span class="hljs-built_in">export</span> JRE_HOME=<span class="hljs-variable">$&#123;JAVA_HOME&#125;</span>/jre<br><span class="hljs-built_in">export</span> CLASSPATH=.:<span class="hljs-variable">$&#123;JAVA_HOME&#125;</span>/lib:<span class="hljs-variable">$&#123;JRE_HOME&#125;</span>/lib<br><span class="hljs-built_in">export</span> PATH=<span class="hljs-variable">$&#123;JAVA_HOME&#125;</span>/bin:<span class="hljs-variable">$PATH</span><br></code></pre></td></tr></table></figure><h2 id="验证环境"><a href="#验证环境" class="headerlink" title="验证环境"></a>验证环境</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">java -version<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>工具安装</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>ubuntu server 根目录扩容</title>
+    <link href="/2023/06/19/ubutnu_server/"/>
+    <url>/2023/06/19/ubutnu_server/</url>
+    
+    <content type="html"><![CDATA[<h2 id="如果是VMware-虚拟机，需要清理快照，整合磁盘之后，先扩容虚拟机磁盘大小"><a href="#如果是VMware-虚拟机，需要清理快照，整合磁盘之后，先扩容虚拟机磁盘大小" class="headerlink" title="如果是VMware 虚拟机，需要清理快照，整合磁盘之后，先扩容虚拟机磁盘大小"></a>如果是VMware 虚拟机，需要清理快照，整合磁盘之后，先扩容虚拟机磁盘大小</h2><h2 id="将硬盘中没有使用的部分添加到已使用的分区中"><a href="#将硬盘中没有使用的部分添加到已使用的分区中" class="headerlink" title="将硬盘中没有使用的部分添加到已使用的分区中"></a>将硬盘中没有使用的部分添加到已使用的分区中</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cfdisk /dev/sda<br></code></pre></td></tr></table></figure><p>按照指示调整分区大小</p><h2 id="调整之后使用lsblk查看调整情况"><a href="#调整之后使用lsblk查看调整情况" class="headerlink" title="调整之后使用lsblk查看调整情况"></a>调整之后使用lsblk查看调整情况</h2><p>df -h 现在查出来的根分区还是之前的大小，但是lsblk显示分区已经扩容，需要使用 resize2fs 命令更新</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">resize2fs /dev/sda1<br></code></pre></td></tr></table></figure><h2 id="格式化硬盘"><a href="#格式化硬盘" class="headerlink" title="格式化硬盘"></a>格式化硬盘</h2><p>lsblk -f 查看 &#x2F;dev&#x2F;sda1 有没有文件系统格式</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> mkfs -t ext4 /dev/sda1<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Linux 基础</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>ubuntu 安装MySQL8</title>
+    <link href="/2023/06/19/ubuntu_install_mysql8/"/>
+    <url>/2023/06/19/ubuntu_install_mysql8/</url>
+    
+    <content type="html"><![CDATA[<h2 id="安装源"><a href="#安装源" class="headerlink" title="安装源"></a>安装源</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">wget https://repo.mysql.com//mysql-apt-config_0.8.22-1_all.deb<br><span class="hljs-built_in">sudo</span> apt install ./mysql-apt-config_0.8.22-1_all.deb<br><span class="hljs-built_in">sudo</span> apt update<br><span class="hljs-built_in">sudo</span> apt install mysql-server<br></code></pre></td></tr></table></figure><p><em><strong>安装的时候输入密码，选择身份验证方式、密码加密方式 Ubuntu 18.04 选择MySQL5.X</strong></em></p><h2 id="root用户开启远程连接"><a href="#root用户开启远程连接" class="headerlink" title="root用户开启远程连接"></a>root用户开启远程连接</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">mysql -uroot -p<br><br>use mysql;<br>update user <span class="hljs-built_in">set</span> host=<span class="hljs-string">&#x27;%&#x27;</span> <span class="hljs-built_in">where</span> user=<span class="hljs-string">&#x27;root&#x27;</span>;<br>FLUSH PRIVILEGES;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>工具安装</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>ffmpeg 的简单使用</title>
+    <link href="/2023/06/19/usd_ffmpeg/"/>
+    <url>/2023/06/19/usd_ffmpeg/</url>
+    
+    <content type="html"><![CDATA[<h2 id="1、保存视频"><a href="#1、保存视频" class="headerlink" title="1、保存视频"></a>1、保存视频</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffmpeg -i input -vcodec copy -acodec copy output<br></code></pre></td></tr></table></figure><h2 id="2、转码"><a href="#2、转码" class="headerlink" title="2、转码"></a>2、转码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffmpeg -i input -vcodec h264 -an -y output<br></code></pre></td></tr></table></figure><h2 id="推流"><a href="#推流" class="headerlink" title="推流"></a>推流</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffmpeg -re -stream_loop -1 -i imput -r 25 -an -vcodec copy -f rtsp 视频流地址<br></code></pre></td></tr></table></figure><h2 id="截图"><a href="#截图" class="headerlink" title="截图"></a>截图</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffmpeg -rtsp_transport tcp -i rtsp://192.168.99.148/jtwf/1102E/000000_001 -vf scale=1920:1080 -r 1 -vframes 1 -an -vcodec mjpeg 000000_001.jpg<br></code></pre></td></tr></table></figure><p><a href="https://www.cnblogs.com/mwl523/p/10856633.html">ffmpeg常用参数一览表</a><br>ffmpeg 常用参数总结：</p><table><thead><tr><th>功能</th><th>参数</th></tr></thead><tbody><tr><td>tcp协议拉流</td><td>-rtsp_transport tcp</td></tr><tr><td>循环读取文件</td><td>-stream_loop -1</td></tr><tr><td>修改分辨率</td><td>-vf scale&#x3D;1280:720</td></tr><tr><td>不重新编解码</td><td>-vcodec copy -acodec copy</td></tr><tr><td>重新编解码</td><td>-vcodec h254</td></tr><tr><td>分割视频</td><td>-ss 指定开始时间 -t 需要多长时间</td></tr></tbody></table><h2 id="特殊字符处理"><a href="#特殊字符处理" class="headerlink" title="特殊字符处理"></a>特殊字符处理</h2><ul><li>转义</li></ul><p>如：ffplay -i rtsp:&#x2F;&#x2F;root:Hik@2021!@15.144.124.204&#x2F;Streaming&#x2F;Channels&#x2F;101<br>转义后：ffplay -i rtsp:&#x2F;&#x2F;root:Hik@2021!@15.144.124.204&#x2F;Streaming&#x2F;Channels&#x2F;101</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  
+</search>
