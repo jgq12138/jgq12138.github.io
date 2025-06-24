@@ -2,7 +2,7 @@
 title: Ubuntu20.04 升级gcc,g++
 tags: Linux
 abbrlink: 7bb79c28
-categories : Linux 命令
+categories : Linux commond
 date: 2023-12-05 09:49:51
 ---
 

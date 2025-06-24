@@ -1,7 +1,7 @@
 ---
 title: Ubuntu server 使用bind9做DNS服务
-tags: DNS
-categories : 网络工具
+tags: Linux
+categories : Network tool
 abbrlink: 979c50d1
 date: 2023-10-27 18:38:42
 ---

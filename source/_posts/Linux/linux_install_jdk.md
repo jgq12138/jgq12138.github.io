@@ -1,7 +1,7 @@
 ---
 title: linux install jdk 8
 tags: Linux
-categories : 工具安装
+categories : tool install
 abbrlink: 1489f6ac
 date: 2023-06-19 18:05:00
 ---

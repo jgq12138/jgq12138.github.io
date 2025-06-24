@@ -2,7 +2,7 @@
 title: ifmetric 调整网络优先级
 date: 2024-06-06 10:24:02
 tags: Linux
-categories : Linux 命令
+categories : Linux commond
 ---
 
 ## metric 简介

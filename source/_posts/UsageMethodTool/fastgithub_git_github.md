@@ -1,7 +1,7 @@
 ---
 title: fastgithub+git访问github
 abbrlink: '33031923'
-categories : 工具使用
+categories : The usage method of the tool
 tags: Github
 date: 2023-07-04 17:08:39
 ---

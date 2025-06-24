@@ -1,7 +1,7 @@
 ---
 title: ubuntu 安装MySQL8
 tags: Linux
-categories : 工具安装
+categories : tool install
 abbrlink: 373b3015
 date: 2023-06-19 18:05:00
 ---

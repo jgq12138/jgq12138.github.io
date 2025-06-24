@@ -1,6 +1,6 @@
 ---
 title: ffmpeg 的简单使用
-tags: Linux
+tags: FFmpeg
 abbrlink: '56107354'
 date: 2023-06-19 18:05:00
 ---

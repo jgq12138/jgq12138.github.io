@@ -1,7 +1,7 @@
 ---
 title: mosquitto编译安装使用
 tags: Linux
-categories : 工具安装
+categories : tool install
 abbrlink: bf3d053b
 date: 2023-06-19 18:05:00
 ---

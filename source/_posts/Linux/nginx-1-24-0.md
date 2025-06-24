@@ -1,9 +1,9 @@
 ---
-title: 编译nginx
-tags: NGINX
-categories : 工具安装
-abbrlink: 1d754660
-date: 2023-06-19 18:05:00
+title: nginx-1.24.0
+categories : tool install
+abbrlink: 4e9c5cbc
+date: 2023-11-04 15:40:30
+tags: Linux
 ---
 
 ## 安装开发工具包
@@ -16,14 +16,14 @@ Centos : sudo dnf group install "Development Tools"
 ## 下载安装包
 
 ```bash
-wget https://nginx.org/download/nginx-1.22.1.tar.gz -P ~/nginx
+wget https://nginx.org/download/nginx-1.24.0.tar.gz -P ~/nginx
 ```
 
 ## 下载第三方依赖
 
 ```bash
 wget https://www.openssl.org/source/openssl-1.1.1f.tar.gz -P ~/nginx
-wget https://www.zlib.net/zlib-1.2.13.tar.gz -P ~/nginx
+wget https://www.zlib.net/zlib-1.3.tar.gz -P ~/nginx
 wget https://nchc.dl.sourceforge.net/project/pcre/pcre/8.45/pcre-8.45.tar.gz -P ~/nginx
 ```
 
@@ -31,17 +31,30 @@ wget https://nchc.dl.sourceforge.net/project/pcre/pcre/8.45/pcre-8.45.tar.gz -P 
 
 ```bash
 cd ~/nginx
-tar -zxvf nginx-1.22.0.tar.gz
+tar -zxvf nginx-1.24.0.tar.gz
 tar -zxvf openssl-1.1.1f.tar.gz
-tar -zxvf zlib-1.2.12.tar.gz
+tar -zxvf zlib-1.3.tar.gz
 tar -zxvf pcre-8.45.tar.gz
 ```
 
 ## 编译安装
 
 ```bash
-cd ~/nginx/nginx-1.22.0/
-./configure --prefix=/usr/local/nginx \
+cd ~/nginx/nginx-1.24.0/
+./configure --prefix=/usr \
+            --sbin-path=/usr/sbin/nginx \
+            --conf-path=/etc/nginx/nginx.conf \
+            --error-log-path=/var/log/nginx/error.log \
+            --http-log-path=/var/log/nginx/access.log \
+            --pid-path=/var/log/nginx/nginx.pid \
+            --lock-path=/var/lock/nginx.lock \
+            --user=nginx \
+            --group=nginx \
+            --http-client-body-temp-path=/var/tmp/nginx/client/ \
+            --http-proxy-temp-path=/var/tmp/nginx/proxy/ \
+            --http-fastcgi-temp-path=/var/tmp/nginx/fcgi/ \
+            --http-uwsgi-temp-path=/var/tmp/nginx/uwsgi/ \
+            --http-scgi-temp-path=/var/tmp/nginx/scgi/ \
             --with-select_module \
             --with-poll_module \
             --with-threads \
@@ -71,12 +84,24 @@ cd ~/nginx/nginx-1.22.0/
             --with-compat \
             --with-pcre=../pcre-8.45 \
             --with-pcre-jit \
-            --with-zlib=../zlib-1.2.13 \
+            --with-zlib=../zlib-1.3 \
             --with-openssl=../openssl-1.1.1f \
             --with-openssl-opt=no-nextprotoneg \
             --with-debug 
 make -j8
 sudo make install
+```
+
+## 创建用户赋权
+
+```bash
+sudo useradd nginx -s /sbin/nologin
+sudo chown nginx:nginx -R /var/log/nginx/
+sudo chown nginx:nginx -R /var/run/nginx/
+sudo mkdir -p /var/lock/nginx/
+sudo mkdir -p /var/tmp/nginx/
+sudo chown nginx:nginx -R /var/lock/nginx/
+sudo chown nginx:nginx -R /var/tmp/nginx/
 ```
 
 ## 创建服务
@@ -87,19 +112,19 @@ sudo vim /etc/systemd/system/nginx.service
 
 ```bash
 [Unit]
-Description=nginx - high performance web server
-Documentation=http://nginx.org/en/docs
-After=network.target remote-fs.target nss-lookup.target
+Description=A high performance web server and a reverse proxy server
+Documentation=man:nginx(8)
+After=network.target
 
 [Service]
 Type=forking
-WorkingDirectory=/usr/local/nginx
-PIDFile=/usr/local/nginx/logs/nginx.pid
-ExecStartPre=/usr/local/nginx/sbin/nginx -t -c /usr/local/nginx/conf/nginx.conf
-ExecStart=/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
-ExecReload=/bin/kill -s HUP $MAINPID
-ExecStop=/bin/kill -s QUIT $MAINPID
-PrivateTmp=true
+PIDFile=/var/log/nginx/nginx.pid
+ExecStartPre=/usr/sbin/nginx -t -q -g 'daemon on; master_process on;'
+ExecStart=/usr/sbin/nginx -g 'daemon on; master_process on;'
+ExecReload=/usr/sbin/nginx -g 'daemon on; master_process on;' -s reload
+ExecStop=-/sbin/start-stop-daemon --quiet --stop --retry QUIT/5 --pidfile /var/log/nginx/nginx.pid
+TimeoutStopSec=5
+KillMode=mixed
 
 [Install]
 WantedBy=multi-user.target

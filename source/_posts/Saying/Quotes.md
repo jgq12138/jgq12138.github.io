@@ -3,10 +3,10 @@ title: 少年应有鸿鹄志，当骑骏马踏平川。
 t: true
 i: true
 l: true
-e: 名言骚句
+e: saying
 date: 2024-06-03 10:28:38
-tags: 名言骚句
-categories : 励志短句
+tags: saying
+categories : saying
 ---
 
 

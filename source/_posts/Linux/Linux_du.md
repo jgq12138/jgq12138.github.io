@@ -1,7 +1,7 @@
 ---
 title: du 的简单使用
 tags: Linux
-categories : Linux 命令
+categories : Linux commond
 abbrlink: f1b2634f
 date: 2023-06-30 18:05:00
 ---

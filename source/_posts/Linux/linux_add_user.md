@@ -1,7 +1,7 @@
 ---
 title: Linux 创建系统用户
 tags: Linux
-categories : Linux 命令
+categories : Linux commond
 abbrlink: c2da4266
 date: 2023-06-19 18:05:00
 ---
