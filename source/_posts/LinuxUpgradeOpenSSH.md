@@ -1,7 +1,7 @@
 ---
-title: LinuxUpgradeOpenSSH
+title: Linux Upgrade OpenSSH
 date: 2025-06-24 15:35:40
-tags:
+tags: Linux
 ---
 
 # download source
