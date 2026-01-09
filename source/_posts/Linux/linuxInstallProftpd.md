@@ -1,10 +1,10 @@
 ---
-title: linuxInstallProftpd
+title: linux Install Proftpd
 date: 2026-01-09 12:19:34
 tags: Linux
 ---
 
-# download
+# linux Install Proftpd
 
 [github uri](https://github.com/proftpd/proftpd.git)
 ```bash
@@ -13,7 +13,7 @@ git clone https://github.com/proftpd/proftpd.git
 
 从GitHub下载最新发布的代码
 
-# build
+## build
 
 ./configure --prefix=/opt/proftpd --enable-openssl --enable-nls --enable-ctrls --enable-shadow
 make 
@@ -24,7 +24,7 @@ add virtual user
 /opt/proftpd/bin/ftpasswd --file=/opt/proftpd/etc/ftpd.passwd --name=to_zw --home=/home/to_zw --passwd --uid=1000 --gid=1000 --shell=/usr/sbin/nologin
 
 
-# configure
+## configure
 
 ```conf
 # This is a basic ProFTPD configuration file (rename it to 
@@ -74,7 +74,7 @@ AuthUserFile	    /opt/proftpd/etc/ftpd.passwd
 </Limit>
 ```
 
-# service
+## service
 
 ```bash
 sudo vim /etc/systemd/system/proftpd.service
@@ -109,7 +109,7 @@ sudo systemct restart proftpd.service
 sudo systemct stop proftpd.service
 ```
 
-# 注意
+## 注意
 虚拟用户向系统文件目录(/home/to_zw )写入时需要系统向目录赋权限,为虚拟用户创建时的uid,gid
 ```bash
 sudo chown -R 1000:1000 /home/to_zw
