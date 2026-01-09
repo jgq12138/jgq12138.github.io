@@ -15,14 +15,15 @@ git clone https://github.com/proftpd/proftpd.git
 
 ## build
 
+```bash
 ./configure --prefix=/opt/proftpd --enable-openssl --enable-nls --enable-ctrls --enable-shadow
 make 
 make install
 
-add virtual user
+# add virtual user
 
 /opt/proftpd/bin/ftpasswd --file=/opt/proftpd/etc/ftpd.passwd --name=to_zw --home=/home/to_zw --passwd --uid=1000 --gid=1000 --shell=/usr/sbin/nologin
-
+```
 
 ## configure
 
