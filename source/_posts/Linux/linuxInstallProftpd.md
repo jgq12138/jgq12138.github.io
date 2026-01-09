@@ -1,4 +1,8 @@
-proftpd
+---
+title: linuxInstallProftpd
+date: 2026-01-09 12:19:34
+tags: Linux
+---
 
 # download
 
