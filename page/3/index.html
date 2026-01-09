@@ -76,7 +76,7 @@
 
 
   
-<meta name="generator" content="Hexo 7.3.0"></head>
+<meta name="generator" content="Hexo 8.0.0"></head>
 
 
 <body>
@@ -241,15 +241,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2023/06/19/linux_create_service/" target="_self">
-          linux 创建service
+        <a href="/2023/06/19/Linux/Ubuntu_server_settings_ipaddress/" target="_self">
+          ubuntu 18.04 server 配置IP地址
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/19/linux_create_service/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/19/Linux/Ubuntu_server_settings_ipaddress/" target="_self">
         <div>
-          说明 Linux下面的系统自启动服务是有systemd 管理的（之前是在init文件夹中写脚本） linux下面有两个地方可以放service文件、一个是&#x2F;lib&#x2F;systemd&#x2F;system，这个是系统服务的位置，一般情况下我们自己建立的服务需要放在&#x2F;etc&#x2F;systemd&#x2F;system文件夹下面和系统服务分开  例如创建nginx的服
+          编译Netplan 配置文件1sudo vim /etc/netplan/50-cloud-init.yaml  配置网络IP和路由1234567891011network:  version: 2  ethernets:    ens33:      dhcp4: false      optional: false      addresses: [&lt;IP地址&gt;/&lt;子网掩码&
         </div>
       </a>
 
@@ -273,7 +273,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Linux-%E5%91%BD%E4%BB%A4/" class="category-chain-item">Linux 命令</a>
+  <a href="/categories/Linux-commond/" class="category-chain-item">Linux commond</a>
   
   
 
@@ -302,74 +302,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2023/06/19/linux_install_jdk/" target="_self">
-          linux install jdk 8
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/19/linux_install_jdk/" target="_self">
-        <div>
-          download jdk 8下载地址   下载： jdk-8u144-linux-x64.tar.gz 配置环境 将下载的包解压到&#x2F;usr&#x2F;local&#x2F;java  1234567sudo tar -xf jdk-8u144-linux-x64.tar.gz -C /usr/local/javasudo vim /etc/profile.d/java.shexport
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-06-19 18:05" pubdate>
-              2023-06-19
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85/" class="category-chain-item">工具安装</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Linux/">#Linux</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2023/06/19/linux_find/" target="_self">
+        <a href="/2023/06/19/Linux/linux_find/" target="_self">
           find 的简单使用
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/19/linux_find/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/19/Linux/linux_find/" target="_self">
         <div>
           1234567891011121314151617181920212223242526272829303132333435Usage: find [-H] [-L] [-P] [-Olevel] [-D debugopts] [path...] [expression]默认路径为当前目录；默认表达式为 -print表达式可能由下列成份组成：操作符、选项、测试表达式以及动作：操作符 (优先级递减；未
         </div>
@@ -395,7 +334,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Linux-%E5%91%BD%E4%BB%A4/" class="category-chain-item">Linux 命令</a>
+  <a href="/categories/Linux-commond/" class="category-chain-item">Linux commond</a>
   
   
 
@@ -424,13 +363,196 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2023/06/19/linux_mount_Network_location/" target="_self">
+        <a href="/2023/06/19/Linux/linux_add_user/" target="_self">
+          Linux 创建系统用户
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/19/Linux/linux_add_user/" target="_self">
+        <div>
+          以root 用户登陆1useradd -r -m -s /bin/bash username   参数说明： -r：建立系统账号 -m：自动建立用户的登入目录 -s：指定用户登入后所使用的shell  -s 参数&#x2F;sbin&#x2F;nologin 这是一个不允许用户登录的shell 修改新建用户的登陆密码1passwd username  将新建用户添加1usermod -aG sud
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-06-19 18:05" pubdate>
+              2023-06-19
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux-commond/" class="category-chain-item">Linux commond</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Linux/">#Linux</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2023/06/19/Linux/linux_create_service/" target="_self">
+          linux 创建service
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/19/Linux/linux_create_service/" target="_self">
+        <div>
+          说明 Linux下面的系统自启动服务是有systemd 管理的（之前是在init文件夹中写脚本） linux下面有两个地方可以放service文件、一个是&#x2F;lib&#x2F;systemd&#x2F;system，这个是系统服务的位置，一般情况下我们自己建立的服务需要放在&#x2F;etc&#x2F;systemd&#x2F;system文件夹下面和系统服务分开  例如创建nginx的服
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-06-19 18:05" pubdate>
+              2023-06-19
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux-commond/" class="category-chain-item">Linux commond</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Linux/">#Linux</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2023/06/19/Linux/linux_install_jdk/" target="_self">
+          linux install jdk 8
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/19/Linux/linux_install_jdk/" target="_self">
+        <div>
+          download jdk 8下载地址   下载： jdk-8u144-linux-x64.tar.gz 配置环境 将下载的包解压到&#x2F;usr&#x2F;local&#x2F;java  1234567sudo tar -xf jdk-8u144-linux-x64.tar.gz -C /usr/local/javasudo vim /etc/profile.d/java.shexport
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-06-19 18:05" pubdate>
+              2023-06-19
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/tool-install/" class="category-chain-item">tool install</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Linux/">#Linux</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2023/06/19/Linux/linux_mount_Network_location/" target="_self">
           挂载网络位置
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/19/linux_mount_Network_location/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/19/Linux/linux_mount_Network_location/" target="_self">
         <div>
           安装1sudo apt install -y cifs-utils  挂载1sudo /bin/mount.cifs -o username=allclient,password=allclient,gid=&quot;1000&quot;,uid=&quot;1000&quot;,vers=3.0 //monitor.com/QP/Minio_Data /opt/Minio_Data  卸载1s
         </div>
@@ -456,7 +578,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Linux-%E5%91%BD%E4%BB%A4/" class="category-chain-item">Linux 命令</a>
+  <a href="/categories/Linux-commond/" class="category-chain-item">Linux commond</a>
   
   
 
@@ -485,15 +607,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2023/06/19/ubutnu_server/" target="_self">
-          ubuntu server 根目录扩容
+        <a href="/2023/06/19/UsageMethodTool/usd_ffmpeg/" target="_self">
+          ffmpeg 的简单使用
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/19/ubutnu_server/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/19/UsageMethodTool/usd_ffmpeg/" target="_self">
         <div>
-          如果是VMware 虚拟机，需要清理快照，整合磁盘之后，先扩容虚拟机磁盘大小将硬盘中没有使用的部分添加到已使用的分区中1cfdisk /dev/sda  按照指示调整分区大小 调整之后使用lsblk查看调整情况df -h 现在查出来的根分区还是之前的大小，但是lsblk显示分区已经扩容，需要使用 resize2fs 命令更新 1resize2fs /dev/sda1  格式化硬盘lsblk -f
+          1、保存视频1ffmpeg -i input -vcodec copy -acodec copy output  2、转码1ffmpeg -i input -vcodec h264 -an -y output  推流1ffmpeg -re -stream_loop -1 -i imput -r 25 -an -vcodec copy -f rtsp 视频流地址  截图1ffmpeg -rtsp_t
         </div>
       </a>
 
@@ -507,32 +629,11 @@
           </div>
         
         
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Linux-%E5%9F%BA%E7%A1%80/" class="category-chain-item">Linux 基础</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
         
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Linux/">#Linux</a>
+              <a href="/tags/FFmpeg/">#FFmpeg</a>
             
           </div>
         
@@ -546,13 +647,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2023/06/19/ubuntu_install_mysql8/" target="_self">
+        <a href="/2023/06/19/Linux/ubuntu_install_mysql8/" target="_self">
           ubuntu 安装MySQL8
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/19/ubuntu_install_mysql8/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/19/Linux/ubuntu_install_mysql8/" target="_self">
         <div>
           安装源1234wget https://repo.mysql.com//mysql-apt-config_0.8.22-1_all.debsudo apt install ./mysql-apt-config_0.8.22-1_all.debsudo apt updatesudo apt install mysql-server  安装的时候输入密码，选择身份验证方式、密码加密方式 Ubuntu
         </div>
@@ -578,7 +679,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85/" class="category-chain-item">工具安装</a>
+  <a href="/categories/tool-install/" class="category-chain-item">tool install</a>
   
   
 
@@ -607,15 +708,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2023/06/19/usd_ffmpeg/" target="_self">
-          ffmpeg 的简单使用
+        <a href="/2023/06/19/Linux/ubutnu_server/" target="_self">
+          ubuntu server 根目录扩容
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/19/usd_ffmpeg/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/06/19/Linux/ubutnu_server/" target="_self">
         <div>
-          1、保存视频1ffmpeg -i input -vcodec copy -acodec copy output  2、转码1ffmpeg -i input -vcodec h264 -an -y output  推流1ffmpeg -re -stream_loop -1 -i imput -r 25 -an -vcodec copy -f rtsp 视频流地址  截图1ffmpeg -rtsp_t
+          如果是VMware 虚拟机，需要清理快照，整合磁盘之后，先扩容虚拟机磁盘大小将硬盘中没有使用的部分添加到已使用的分区中1cfdisk /dev/sda  按照指示调整分区大小 调整之后使用lsblk查看调整情况df -h 现在查出来的根分区还是之前的大小，但是lsblk显示分区已经扩容，需要使用 resize2fs 命令更新 1resize2fs /dev/sda1  格式化硬盘lsblk -f
         </div>
       </a>
 
@@ -628,6 +729,27 @@
             </time>
           </div>
         
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux-commond/" class="category-chain-item">Linux commond</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
         
         
           <div class="post-meta">
