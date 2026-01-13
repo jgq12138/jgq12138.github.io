@@ -1,5 +1,5 @@
 ---
-title: linux_systemctl_mount_samba.md
+title: linux systemctl mount samba
 date: 2026-01-13 10:07:45
 tags: Linux
 ---
