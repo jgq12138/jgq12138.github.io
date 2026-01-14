@@ -1,5 +1,5 @@
 ---
-title: Ubuntuu_pdate-alternatives
+title: Ubuntu update-alternatives
 date: 2025-08-07 11:14:17
 tags:
 ---

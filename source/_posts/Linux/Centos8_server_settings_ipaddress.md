@@ -1,5 +1,5 @@
 ---
-title: Centos8服务器配置IP地址
+title: Centos 8 服务器配置IP地址
 tags: Linux
 categories : Linux commond
 abbrlink: 91dffcc2
