@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "76a37bbcd605f560",
+        "id": "bf289319bab18331",
         "type": "tabs",
         "children": [
           {
-            "id": "232f79519dbdf78c",
+            "id": "eccb62939d8495e2",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "source/_posts/Template/front_matter.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "新标签页"
+              "title": "front_matter"
             }
           }
         ]
@@ -150,20 +154,31 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "source/_posts/Template/front_matter.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "大纲"
+              "title": "front_matter 的大纲"
+            }
+          },
+          {
+            "id": "479a6bc378ef4b90",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
             }
           }
-        ]
+        ],
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -177,6 +192,44 @@
       "bases:新建数据库": false
     }
   },
-  "active": "232f79519dbdf78c",
-  "lastOpenFiles": []
+  "active": "479a6bc378ef4b90",
+  "lastOpenFiles": [
+    "source/_posts/UsageMethodTool/windows10_install_scoop.md",
+    "source/_posts/UsageMethodTool/usd_ffmpeg.md",
+    "source/_posts/UsageMethodTool/fastgithub_git_github.md",
+    "source/_posts/Saying/quotes.md",
+    "source/_posts/Linux/ubutnu_server.md",
+    "source/_posts/Linux/ubuntu22_04_install_nvidia_driver.md",
+    "source/_posts/Linux/ubuntu20_04_update_gcc_g++.md",
+    "source/_posts/Linux/Ubuntu_server_settings_ipaddress.md",
+    "source/_posts/Linux/ubuntu_update_alternatives.md",
+    "source/_posts/Linux/Ubuntu_server_bind9.md",
+    "source/_posts/Linux/ubuntu_install_mysql8.md",
+    "source/_posts/Linux/nginx_1_24_0.md",
+    "source/_posts/Linux/oracle_linux_install_oracle_19c.md",
+    "source/_posts/Linux/linux_upgrade_openssh_cn.md",
+    "source/_posts/Linux/linux_upgrade_openssh.md",
+    "source/_posts/Linux/Linux_rsync.md",
+    "source/_posts/Linux/linux_systemctl_mount_samba.md",
+    "source/_posts/Linux/linux_mount_Network_location.md",
+    "source/_posts/Linux/Linux_install_redis.md",
+    "source/_posts/Linux/linux_install_proftpd.md",
+    "source/_posts/Linux/Linux_install_nginx.md",
+    "source/_posts/Linux/Linux_install_mqtt.md",
+    "source/_posts/Linux/Linux_install_mosquitto.md",
+    "source/_posts/Linux/Linux_install_minio.md",
+    "source/_posts/Linux/linux_mount_network_location.md",
+    "source/_posts/Linux/linux_install_jdk.md",
+    "public/2025/06/24/UsageMethodTool/windows10_install_scoop/index.html",
+    "public/2025/06/24/UsageMethodTool/usd_ffmpeg/index.html",
+    "public/2025/06/24/UsageMethodTool/fastgithub_git_github/index.html",
+    "public/2025/06/24/Linux/ubutnu_server/index.html",
+    "public/2025/06/24/Linux/ubuntu_server_settings_ipaddress/index.html",
+    "public/2025/06/24/Linux/ubuntu_server_bind9/index.html",
+    "public/2025/06/24/Linux/ubuntu_install_mysql8/index.html",
+    "public/2025/06/24/Linux/ubuntu_enable_desktop_amd_disenable_desktop/index.html",
+    "public/2025/06/24/Linux/ubuntu20_04_update_gcc_g++/index.html",
+    "public/2025/06/24/Linux/nginx_1_24_0/index.html",
+    "public/img/avatar.png"
+  ]
 }

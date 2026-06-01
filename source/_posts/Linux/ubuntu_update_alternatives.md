@@ -2,6 +2,7 @@
 title: Ubuntu update-alternatives
 date: 2025-08-07 11:14:17
 tags:
+  - Linux
 ---
 
 # Ubuntu中update-alternatives命令使用教程
