@@ -1,5 +1,0 @@
-deploy:
-  type: git
-  repo: https://github.com/jgq12138/jgq12138.github.io.git
-  # example, https://github.com/hexojs/hexojs.github.io
-  branch: gh-pages

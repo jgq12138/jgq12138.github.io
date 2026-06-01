@@ -1,3 +1,9 @@
+---
+title: Oracle linux install oracle 19c databases
+tags: Linux
+date: 2026-06-01 09:42:13
+---
+
 # Oracle linux install oracle 19c databases
 
 

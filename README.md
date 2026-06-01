@@ -1,70 +1,18 @@
 # jgq12138.github.io
 
-Jgq12138 blog
+JGQ12138 的个人博客，基于 [Hexo](https://hexo.io/) 构建，使用 [Fluid](https://github.com/fluid-dev/hexo-theme-fluid) 主题，部署在 GitHub Pages。
 
-## Hexo是一个基于Node.js的静态博客框架，用于快速搭建个人博客。以下是一些常见的Hexo命令参数
-
-- hexo init [folder]：初始化一个新的Hexo博客，[folder]为可选参数，指定博客的文件夹名称。
-- hexo new [title]：创建一篇新的文章，[title]为文章的标题。
-- hexo generate：生成静态网页，将Markdown文件转换为HTML文件。
-- hexo server：启动本地服务器，用于预览博客网页。
-- hexo deploy：部署博客到远程服务器，如GitHub Pages。
-- hexo clean：清除Hexo生成的缓存文件。
-- hexo help：显示Hexo的帮助信息，列出所有可用的命令和参数。
-- hexo version：显示Hexo的版本信息。
+## 常用命令
 
 ```bash
-INFO  Validating config
-Usage: hexo <command>
-
-Commands:
-  clean     Remove generated files and cache.
-  config    Get or set configurations.
-  deploy    Deploy your website.
-  generate  Generate static files.
-  help      Get help on a command.
-  init      Create a new Hexo folder.
-  list      List the information of the site
-  migrate   Migrate your site from other system to Hexo.
-  new       Create a new post.
-  publish   Moves a draft post from _drafts to _posts folder.
-  render    Render files with renderer plugins.
-  server    Start the server.
-  version   Display version information.
-
-Global Options:
-  --config  Specify config file instead of using _config.yml
-  --cwd     Specify the CWD
-  --debug   Display all verbose messages in the terminal
-  --draft   Display draft posts
-  --safe    Disable all plugins and scripts
-  --silent  Hide output on console
+npm run build    # 生成静态文件 (hexo generate)
+npm run server   # 启动本地预览 (hexo server)
+npm run clean    # 清除缓存 (hexo clean)
+npm run deploy   # 手动部署到 gh-pages
+npx hexo new "标题"        # 新建文章
+npx hexo new page "名称"   # 新建页面
 ```
 
-## build
+## 自动部署
 
-```bash
-npm install -g hexo-cli
-npm install hexo-deployer-git --save
-hexo clean
-hexo generate
-hexo deploy
-```
-
-## 安装主题
-
-```bash
-git clone https://github.com/cofess/hexo-theme-pure.git themes/pure
-```
-
-## 新建文章
-
-```bash
-hexo new Articles
-```
-
-## 新建页面
-
-```bash
-hexo new page Name
-```
+推送到 `main` 分支会自动触发 GitHub Actions 构建并部署到 GitHub Pages。
