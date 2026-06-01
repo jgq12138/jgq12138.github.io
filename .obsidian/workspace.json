@@ -20,8 +20,43 @@
               "icon": "lucide-file",
               "title": "front_matter"
             }
+          },
+          {
+            "id": "c3548bcf41f6d558",
+            "type": "leaf",
+            "state": {
+              "type": "terminal-view",
+              "state": {
+                "tabs": [
+                  {
+                    "name": "Terminal 1",
+                    "color": "",
+                    "cwd": "C:\\Users\\ZX-JGQ\\Documents\\workspace\\github.com\\jgq12138.github.io",
+                    "bufferSerial": "PS C:\\Users\\ZX-JGQ\\Documents\\workspace\\github.com\\jgq12138.github.io> \u001b[93mpwd\r\n\r\n\u001b[32;1mPath\r\n----\r\n\u001b[0mC:\\Users\\ZX-JGQ\\Documents\\workspace\\github.com\\jgq12138.github.io\r\n\r\nPS C:\\Users\\ZX-JGQ\\Documents\\workspace\\github.com\\jgq12138.github.io> \u001b[93mopencode\u001b[1B\u001b[78D\u001b[0m\u001b[?1049h\u001b[H\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: tags/Linux/page/3/index.html\u001b[64X\u001b[64C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/07/04/UsageMethodTool/fastgithub_git_github/index.html\u001b[33X\u001b[33C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m  \u001b[38;2;238;238;238;1mUbuntu Server Bind9搭建文档整理\u001b[38;2;255;255;255;22m         -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/12/13/Linux/Ubuntu_enable_desktop_amd_disenable_desktop/index.html\u001b[21X\u001b[21C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/11/04/Linux/nginx_1_24_0/index.html\u001b[52X\u001b[52C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m  \u001b[38;2;238;238;238;1mContext\u001b[38;2;255;255;255;22m                                 -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/10/27/Linux/Ubuntu_server_bind9/index.html\u001b[45X\u001b[45C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m  \u001b[38;2;128;128;128m37,714 tokens                           -\u001b[1D\u001b[1X\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/12/05/Linux/ubuntu20_04_update_gcc_g++/index.html\u001b[38X\u001b[38C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m  \u001b[38;2;128;128;128m19% used                                -\u001b[1D\u001b[1X\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/07/16/UsageMethodTool/windows10_install_scoop/index.html\u001b[31X\u001b[31C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m  \u001b[38;2;128;128;128m$0.00 spent                             -\u001b[1D\u001b[1X\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/06/19/Linux/linux_create_service/index.html\u001b[44X\u001b[44C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/06/30/Linux/Linux_du/index.html    \u001b[52X\u001b[52C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m  \u001b[38;2;238;238;238;1mLSP\u001b[38;2;255;255;255;22m                                     -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/06/19/UsageMethodTool/usd_ffmpeg/index.html\u001b[44X\u001b[44C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m  \u001b[38;2;128;128;128mLSPs are disabled                       -\u001b[1D\u001b[1X\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/06/19/Linux/linux_find/index.html\u001b[54X\u001b[54C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/06/19/Linux/linux_install_jdk/index.html\u001b[47X\u001b[47C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m  \u001b[38;2;238;238;238;1mModified Files\u001b[38;2;255;255;255;22m                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/06/19/Linux/ubutnu_server/index.html       \u001b[44X\u001b[44C\u001b[38;2;245;167;66;48;2;10;10;10m  \u001b[38;2;255;255;255;48;2;20;20;20m  \u001b[38;2;128;128;128m.obsidian/workspace.json      \u001b[38;2;79;214;190m+12 \u001b[38;2;197;59;83m-12   -\u001b[1D\u001b[1X\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/06/19/Linux/Centos8_server_settings_ipaddress/index.html\u001b[31X\u001b[31C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m  \u001b[38;2;128;128;128msource/_posts/Linux/Ubuntu_se \u001b[38;2;79;214;190m+364 \u001b[38;2;197;59;83m-3   -\u001b[1D\u001b[1X\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃\u001b[2X\u001b[2C\u001b[38;2;238;238;238mINFO  Generated: 2023/06/19/Linux/ubuntu_install_mysql8/index.html\u001b[43X\u001b[43C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/06/19/Linux/linux_add_user/index.html\u001b[50X\u001b[50C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃\u001b[2X\u001b[2C\u001b[38;2;238;238;238mINFO  Generated: 2023/06/19/Linux/Linux_install_mosquitto/index.html\u001b[41X\u001b[41C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/06/19/Linux/Linux_install_mqtt/index.html\u001b[46X\u001b[46C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃\u001b[2X\u001b[2C\u001b[38;2;238;238;238mINFO  Generated: 2023/06/19/Linux/Linux_install_minio/index.html\u001b[45X\u001b[45C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/06/19/Linux/Ubuntu_server_settings_ipaddress/index.html\u001b[32X\u001b[32C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/06/19/Linux/Linux_install_redis/index.html\u001b[45X\u001b[45C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃\u001b[2X\u001b[2C\u001b[38;2;238;238;238mINFO  Generated: 2023/06/19/Linux/Linux_install_nginx/index.html    \u001b[41X\u001b[41C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/06/19/Linux/linux_mount_Network_location/index.html\u001b[36X\u001b[36C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO  Generated: 2023/06/19/Linux/Linux_rsync/index.html        \u001b[45X\u001b[45C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;238;238;238mINFO\u001b[2X\u001b[2C66 files generated in 585 ms\u001b[75X\u001b[75C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[109X\u001b[109C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          \r\n\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[38;2;128;128;128mClick to collapse\u001b[92X\u001b[92C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;10;10;10;48;2;30;30;30m┃  \u001b[109X\u001b[109C\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[112X\u001b[112C  \u001b[48;2;20;20;20m                                          \r\n\u001b[48;2;10;10;10m     \u001b[38;2;245;167;66m+ Thought: 326ms\u001b[93X\u001b[93C\u001b[38;2;255;255;255m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[112X\u001b[112C  \u001b[48;2;20;20;20m                                          \r\n\u001b[48;2;10;10;10m     \u001b[38;2;238;238;238m构建成功，\u001b[38;2;127;216;143mhexo generate \u001b[38;2;238;238;238m无报错。已将原文档从仅一个 zone 示例全面升级为完整的 BIND9 搭建指南，涵盖：\u001b[10X\u001b[10C\u001b[38;2;255;255;255m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[112X\u001b[112C  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m     \u001b[38;2;250;178;131m- \u001b[38;2;238;238;238m安装与配置文件结构说明\u001b[38;2;255;255;255m                                                                                       \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m     \u001b[38;2;250;178;131m- \u001b[38;2;238;238;238m缓存递归解析器配置（forwarders、ACL、DNSSEC）\u001b[38;2;245;167;66m                                                                \u001b[38;2;255;255;255;48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m     \u001b[38;2;250;178;131m- \u001b[38;2;238;238;238m权威正向区域 + 反向区域\u001b[38;2;255;255;255m                                                                                      \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m     \u001b[38;2;250;178;131m- \u001b[38;2;238;238;238m安全加固（隐藏版本、限制递归、防区域传送）\u001b[55X\u001b[55C            \u001b[38;2;255;255;255;48;2;20;20;20m  \u001b[48;2;30;30;30m                                      \u001b[48;2;20;20;20m  -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[3X\u001b[3C\u001b[38;2;250;178;131m- \u001b[38;2;238;238;238m防火墙、客户端配置\u001b[89X\u001b[89C\u001b[38;2;255;255;255m  \u001b[48;2;20;20;20m  \u001b[48;2;30;30;30m  \u001b[38;2;238;238;238m⬖ \u001b[1mGetting started\u001b[38;2;255;255;255;22m                \u001b[38;2;128;128;128m✕  \u001b[38;2;255;255;255;48;2;20;20;20m  \r\n\u001b[48;2;10;10;10m     \u001b[38;2;250;178;131m- \u001b[38;2;238;238;238m完整的故障排查表与安全最佳实践\u001b[77X\u001b[77C  \u001b[38;2;255;255;255;48;2;20;20;20m  \u001b[48;2;30;30;30m                                      \u001b[48;2;20;20;20m  -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m     \u001b[109X\u001b[109C\u001b[38;2;238;238;238m  \u001b[38;2;255;255;255;48;2;20;20;20m  \u001b[48;2;30;30;30m    \u001b[38;2;128;128;128mOpenCode includes free models     \u001b[38;2;255;255;255;48;2;20;20;20m  \r\n\u001b[48;2;10;10;10m     \u001b[38;2;92;156;245m▣  \u001b[38;2;238;238;238mBuild \u001b[38;2;128;128;128m· Big Pickle · 1m 4s\u001b[80X\u001b[80C\u001b[38;2;238;238;238m  \u001b[38;2;255;255;255;48;2;20;20;20m  \u001b[48;2;30;30;30m    \u001b[38;2;128;128;128mso you can start immediately.     \u001b[38;2;255;255;255;48;2;20;20;20m  -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m     \u001b[38;2;128;128;128m⠹ Build Task — 根据变更内容生成中文提交信息，确认后提交\u001b[54X\u001b[54C\u001b[38;2;238;238;238m  \u001b[38;2;255;255;255;48;2;20;20;20m  \u001b[48;2;30;30;30m                                      \u001b[48;2;20;20;20m  -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m     \u001b[109X\u001b[109C\u001b[38;2;238;238;238m  \u001b[38;2;255;255;255;48;2;20;20;20m  \u001b[48;2;30;30;30m    \u001b[38;2;128;128;128mConnect from 75+ providers to     \u001b[38;2;255;255;255;48;2;20;20;20m  \r\n\u001b[48;2;10;10;10m     \u001b[38;2;238;238;238mctrl+x down \u001b[38;2;128;128;128mview subagents      \u001b[77X\u001b[77C\u001b[38;2;238;238;238m  \u001b[38;2;255;255;255;48;2;20;20;20m  \u001b[48;2;30;30;30m    \u001b[38;2;128;128;128muse other models, including       \u001b[38;2;255;255;255;48;2;20;20;20m  -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[112X\u001b[112C  \u001b[48;2;20;20;20m  \u001b[48;2;30;30;30m    \u001b[38;2;128;128;128mClaude, GPT, Gemini etc           \u001b[38;2;255;255;255;48;2;20;20;20m  -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m     \u001b[38;2;92;156;245m▣  \u001b[38;2;238;238;238mBuild \u001b[38;2;128;128;128m· Big Pickle        \u001b[80X\u001b[80C  \u001b[38;2;255;255;255;48;2;20;20;20m  \u001b[48;2;30;30;30m                                      \u001b[48;2;20;20;20m  -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[112X\u001b[112C  \u001b[48;2;20;20;20m  \u001b[48;2;30;30;30m    \u001b[38;2;238;238;238mConnect provider        \u001b[38;2;128;128;128m/connect  \u001b[38;2;255;255;255;48;2;20;20;20m  -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;92;156;245m┃\u001b[38;2;255;255;255;48;2;30;30;30m                                                                                                               \u001b[48;2;10;10;10m  \u001b[48;2;20;20;20m  \u001b[48;2;30;30;30m                                      \u001b[48;2;20;20;20m  -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;92;156;245m┃\u001b[38;2;255;255;255;48;2;30;30;30m                                                                                                               \u001b[48;2;10;10;10m  \u001b[48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m  \u001b[38;2;92;156;245m┃\u001b[38;2;255;255;255;48;2;30;30;30m                                                                                                               \u001b[48;2;10;10;10m  \u001b[48;2;20;20;20m  \u001b[38;2;128;128;128m/\u001b[38;2;238;238;238m~\\Documents\\workspace\\github.com\\      -\u001b[1D\u001b[1X\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[38;2;92;156;245m┃\u001b[38;2;255;255;255;48;2;30;30;30m  \u001b[38;2;92;156;245mBuild \u001b[38;2;128;128;128m· \u001b[38;2;238;238;238mBig Pickle \u001b[38;2;128;128;128mOpenCode Zen                                                                              \u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[48;2;20;20;20m  \u001b[38;2;238;238;238mjgq12138.github.io:main                 -\u001b[1D\u001b[1X\u001b[38;2;255;255;255;48;2;10;10;10m  \u001b[38;2;92;156;245m╹\u001b[38;2;30;30;30m▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀  \u001b[38;2;255;255;255;48;2;20;20;20m                                          -\u001b[1D\u001b[1X\u001b[48;2;10;10;10m   \u001b[38;2;53;87;134m⬝\u001b[38;2;92;156;245m■\u001b[38;2;97;162;231m■\u001b[38;2;63;105;163m■\u001b[38;2;45;72;110m■\u001b[38;2;33;50;75m■\u001b[38;2;25;36;52m■\u001b[38;2;53;87;134m⬝\u001b[38;2;255;255;255m  \u001b[38;2;238;238;238mesc \u001b[38;2;128;128;128minterrupt\u001b[38;2;255;255;255m                                                            \u001b[38;2;128;128;128m37.7K (19%)  \u001b[38;2;238;238;238mctrl+p \u001b[38;2;128;128;128mcommands  \u001b[38;2;255;255;255;48;2;20;20;20m  \u001b[38;2;127;216;143m• \u001b[38;2;128;128;128;1mOpen\u001b[38;2;238;238;238mCode\u001b[38;2;128;128;128;22m 1.15.13                      -\u001b[1D\u001b[1X\u001b[38;2;255;255;255;48;2;10;10;10m                                                                                                                    \u001b[48;2;20;20;20m                                          \u001b[5A\u001b[153D\u001b[0m\u001b[?2004h\u001b[?1004h\u001b[?1003h"
+                  }
+                ],
+                "activeIndex": 0
+              },
+              "icon": "terminal",
+              "title": "Terminal"
+            }
+          },
+          {
+            "id": "9d43aa6b399a76fe",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "source/_posts/Linux/Ubuntu_server_bind9.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Ubuntu_server_bind9"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -154,13 +189,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "source/_posts/Template/front_matter.md",
+                "file": "source/_posts/Linux/Ubuntu_server_bind9.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "front_matter 的大纲"
+              "title": "Ubuntu_server_bind9 的大纲"
             }
           },
           {
@@ -189,11 +224,25 @@
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
       "command-palette:打开命令面板": false,
-      "bases:新建数据库": false
+      "bases:新建数据库": false,
+      "terminal:Open terminal": false,
+      "lean-terminal:Open terminal": false
     }
   },
-  "active": "479a6bc378ef4b90",
+  "active": "c3548bcf41f6d558",
   "lastOpenFiles": [
+    "public/tags/Scoop/index.html",
+    "public/tags/Scoop",
+    "public/tags/FFmpeg/index.html",
+    "public/tags/FFmpeg",
+    "public/categories/Windows/index.html",
+    "public/categories/Windows",
+    "public/tags/Github/index.html",
+    "public/tags/Github",
+    "public/categories/The-usage-method-of-the-tool/index.html",
+    "public/categories/The-usage-method-of-the-tool",
+    "public/categories/Network-tool/index.html",
+    "source/_posts/Template/front_matter.md",
     "source/_posts/UsageMethodTool/windows10_install_scoop.md",
     "source/_posts/UsageMethodTool/usd_ffmpeg.md",
     "source/_posts/UsageMethodTool/fastgithub_git_github.md",
@@ -218,18 +267,6 @@
     "source/_posts/Linux/Linux_install_mqtt.md",
     "source/_posts/Linux/Linux_install_mosquitto.md",
     "source/_posts/Linux/Linux_install_minio.md",
-    "source/_posts/Linux/linux_mount_network_location.md",
-    "source/_posts/Linux/linux_install_jdk.md",
-    "public/2025/06/24/UsageMethodTool/windows10_install_scoop/index.html",
-    "public/2025/06/24/UsageMethodTool/usd_ffmpeg/index.html",
-    "public/2025/06/24/UsageMethodTool/fastgithub_git_github/index.html",
-    "public/2025/06/24/Linux/ubutnu_server/index.html",
-    "public/2025/06/24/Linux/ubuntu_server_settings_ipaddress/index.html",
-    "public/2025/06/24/Linux/ubuntu_server_bind9/index.html",
-    "public/2025/06/24/Linux/ubuntu_install_mysql8/index.html",
-    "public/2025/06/24/Linux/ubuntu_enable_desktop_amd_disenable_desktop/index.html",
-    "public/2025/06/24/Linux/ubuntu20_04_update_gcc_g++/index.html",
-    "public/2025/06/24/Linux/nginx_1_24_0/index.html",
     "public/img/avatar.png"
   ]
 }

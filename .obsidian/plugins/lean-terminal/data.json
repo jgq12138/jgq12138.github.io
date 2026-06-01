@@ -1,0 +1,96 @@
+{
+  "shellPath": "",
+  "startupCommand": "",
+  "fontSize": 14,
+  "fontFamily": "Menlo, Monaco, 'Courier New', monospace",
+  "lineHeight": 1,
+  "theme": "obsidian-dark",
+  "backgroundColor": "",
+  "cursorBlink": true,
+  "cursorStyle": "block",
+  "copyOnSelect": false,
+  "scrollback": 5000,
+  "ribbonIcon": "terminal",
+  "defaultLocation": "tab",
+  "notifyOnCompletion": false,
+  "notificationSound": "beep",
+  "notificationVolume": 50,
+  "searchShortcut": "Ctrl+Alt+F",
+  "persistBuffer": true,
+  "recentSessionsMax": 10,
+  "recentSessions": [
+    {
+      "name": "Terminal 1",
+      "color": "",
+      "cwd": "C:\\Users\\ZX-JGQ\\Documents\\workspace\\github.com\\jgq12138.github.io",
+      "bufferSerial": "PS C:\\Users\\ZX-JGQ\\Documents\\workspace\\github.com\\jgq12138.github.io>\r\nPS C:\\Users\\ZX-JGQ\\Documents\\workspace\\github.com\\jgq12138.github.io>\r\nPS C:\\Users\\ZX-JGQ\\Documents\\workspace\\github.com\\jgq12138.github.io>\u001b[1C\u001b[?1004h",
+      "closedAt": 1780283725500
+    },
+    {
+      "name": "Terminal 2",
+      "color": "",
+      "cwd": "C:\\Users\\ZX-JGQ\\Documents\\workspace\\github.com\\jgq12138.github.io",
+      "bufferSerial": "PS C:\\Users\\ZX-JGQ\\Documents\\workspace\\github.com\\jgq12138.github.io> \u001b[?1004h",
+      "closedAt": 1780283687553
+    },
+    {
+      "name": "Terminal 1",
+      "color": "",
+      "cwd": "C:\\Users\\ZX-JGQ\\Documents\\workspace\\github.com\\jgq12138.github.io",
+      "bufferSerial": "\r\n\u001b[33mTerminal binaries not installed.\r\n\u001b[0mGo to Settings → Terminal to download them.\u001b[1B\u001b[43D",
+      "closedAt": 1780283617523
+    }
+  ],
+  "enableClaudeIntegration": false,
+  "claudeSessionsDir": "",
+  "claudeRegistryPath": "claude-sessions.md",
+  "claudeSessionsMax": 25,
+  "tabColorTintsBackground": true,
+  "tabColors": [
+    {
+      "name": "None",
+      "value": "",
+      "tintStrength": 0,
+      "builtin": true
+    },
+    {
+      "name": "Vermilion",
+      "value": "#FC3634",
+      "tintStrength": 12,
+      "builtin": true
+    },
+    {
+      "name": "Sky Blue",
+      "value": "#25D0F7",
+      "tintStrength": 12,
+      "builtin": true
+    },
+    {
+      "name": "Gold",
+      "value": "#FFD700",
+      "tintStrength": 12,
+      "builtin": true
+    },
+    {
+      "name": "Mint",
+      "value": "#18BC9C",
+      "tintStrength": 12,
+      "builtin": true
+    },
+    {
+      "name": "Azure",
+      "value": "#007BFF",
+      "tintStrength": 12,
+      "builtin": true
+    },
+    {
+      "name": "Purple",
+      "value": "#A991D4",
+      "tintStrength": 12,
+      "builtin": true
+    }
+  ],
+  "tabBarPosition": "top",
+  "wikiLinkAutocomplete": false,
+  "wikiLinkInsertMode": "wikilink"
+}
